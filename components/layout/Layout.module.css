@@ -8,5 +8,60 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Мобильный topbar */
+.mobileTopbar {
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: white;
+  border-bottom: 0.5px solid #e0e0e0;
+  padding: 0 16px;
+  height: 52px;
   align-items: center;
+  justify-content: space-between;
+}
+
+.mobileLogo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobileLogoName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+}
+
+.burgerBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  color: #444;
+  display: flex;
+  align-items: center;
+}
+
+/* Overlay для мобильного меню */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 40;
+}
+
+.overlayVisible {
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .mobileTopbar {
+    display: flex;
+  }
 }
