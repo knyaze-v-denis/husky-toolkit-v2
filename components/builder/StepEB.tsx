@@ -34,7 +34,7 @@ export function StepEB({
     <div className={styles.wrap}>
 
       {/* Объём работ */}
-      <div className={styles.block} style={{ '--active-bg': hexToRgba(b.color, 0.35), '--active-color': b.tc } as React.CSSProperties}>
+      <div className={styles.block} style={{ '--active-bg': hexToRgba(b.color, 0.2), '--active-color': b.tc } as React.CSSProperties}>
         <div className={styles.blockHead} style={{ background: b.color, color: b.tc }}>
           <span>Объём работ</span>
           <span className={styles.blockHint}>Определено автоматически</span>
@@ -50,7 +50,7 @@ export function StepEB({
       </div>
 
       {/* Сложность */}
-      <div className={styles.block} style={{ '--active-bg': hexToRgba(EB_COMPLEXITY.color, 0.45), '--active-color': EB_COMPLEXITY.tc } as React.CSSProperties}>
+      <div className={styles.block} style={{ '--active-bg': hexToRgba(EB_COMPLEXITY.color, 0.3), '--active-color': EB_COMPLEXITY.tc } as React.CSSProperties}>
         <div
           className={styles.blockHead}
           style={{ background: EB_COMPLEXITY.color, color: EB_COMPLEXITY.tc }}
@@ -78,7 +78,7 @@ export function StepEB({
       </div>
 
       {/* Новизна */}
-      <div className={styles.block} style={{ '--active-bg': hexToRgba(EB_NOVELTY.color, 0.45), '--active-color': EB_NOVELTY.tc } as React.CSSProperties}>
+      <div className={styles.block} style={{ '--active-bg': hexToRgba(EB_NOVELTY.color, 0.3), '--active-color': EB_NOVELTY.tc } as React.CSSProperties}>
         <div
           className={styles.blockHead}
           style={{ background: EB_NOVELTY.color, color: EB_NOVELTY.tc }}
@@ -106,7 +106,7 @@ export function StepEB({
       </div>
 
       {/* Риски */}
-      <div className={styles.block} style={{ '--active-bg': hexToRgba('#FAEEDA', 0.6), '--active-color': '#633806' } as React.CSSProperties}>
+      <div className={styles.block} style={{ '--active-bg': hexToRgba('#FAEEDA', 0.35), '--active-color': '#633806' } as React.CSSProperties}>
         <div className={styles.blockHead} style={{ background: '#FAEEDA', color: '#633806' }}>
           <span>Риски</span>
         </div>
@@ -114,7 +114,6 @@ export function StepEB({
           const sel = risks[group.label] ?? [];
           return (
             <div key={group.label}>
-              {gi > 0 && <div className={styles.groupDivider} />}
               <div className={styles.groupLabel}>{group.label}</div>
               {group.items.map(item => {
                 const active = sel.includes(item.v);

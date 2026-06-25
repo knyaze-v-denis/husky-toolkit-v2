@@ -140,10 +140,7 @@
   color: #888;
   text-transform: uppercase;
   letter-spacing: 0.4px;
-  background: #fafafa;
-}
-
-.groupDivider {
-  height: 0.5px;
-  background: #e8e8e8;
+  background: #f2f2f2;
+  border-top: 0.5px solid #e0e0e0;
+  border-bottom: 0.5px solid #e0e0e0;
 }
