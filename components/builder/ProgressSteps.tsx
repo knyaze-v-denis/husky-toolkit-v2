@@ -16,7 +16,7 @@ export function ProgressSteps({ steps, current, maxReached, onNavigate }: Progre
     <div className={styles.row}>
       {steps.map((step, i) => {
         const n = i + 1;
-        const isDone   = n < current;
+        const isDone   = n !== current && n <= maxReached;
         const isActive = n === current;
         const canClick = n <= maxReached && n !== current;
 

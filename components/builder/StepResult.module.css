@@ -37,10 +37,11 @@
   justify-content: space-between;
 }
 
-.ebLeft {
+.ebRight {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  text-align: right;
 }
 
 .ebLabel {
@@ -119,8 +120,15 @@
 .footer {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 8px;
   padding-top: 4px;
+}
+
+.footerRight {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .backBtn {
@@ -132,9 +140,29 @@
   border: 0.5px solid #d8d8d8;
   border-radius: 8px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
 }
 
 .backBtn:hover {
+  background: #f5f5f5;
+}
+
+.pdfBtn {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  background: transparent;
+  color: #555;
+  border: 0.5px solid #d8d8d8;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.pdfBtn:hover {
   background: #f5f5f5;
 }
 

@@ -127,6 +127,8 @@
   border: 0.5px solid #d8d8d8;
   border-radius: 8px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
 }
 
 .backBtn:hover {
@@ -143,4 +145,6 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
 }

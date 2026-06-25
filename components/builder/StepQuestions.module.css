@@ -77,6 +77,8 @@
   border-radius: 8px;
   cursor: pointer;
   transition: opacity 0.15s;
+  display: inline-flex;
+  align-items: center;
 }
 
 .nextBtn:disabled {

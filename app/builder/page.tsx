@@ -58,7 +58,7 @@ export default function BuilderPage() {
   const badgeText = step === 1
     ? `${fmtScore(qScore)} баллов`
     : step >= 3
-    ? `${fmtScore(ebScore)} ЭБ`
+    ? `${fmtScore(ebScore)} баллов`
     : build
     ? BUILDS[build].name
     : '';
@@ -68,7 +68,7 @@ export default function BuilderPage() {
   const statsLeft = step === 1
     ? `${answeredQ} из ${totalQ} отвечено`
     : step >= 3 && build
-    ? `${BUILDS[build].name} билд · ${fmtScore(ebScore)} ЭБ · ${ebSize.size}`
+    ? `${BUILDS[build].name} билд · ${fmtScore(ebScore)} баллов · ${ebSize.size}`
     : '';
 
   return (

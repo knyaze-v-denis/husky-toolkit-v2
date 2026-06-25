@@ -1,5 +1,6 @@
 'use client';
 
+import { ArrowRight } from 'lucide-react';
 import { QUESTIONS, type Answer } from '@/lib/data/builder';
 import styles from './StepQuestions.module.css';
 
@@ -55,7 +56,7 @@ export function StepQuestions({ answers, onAnswer, onNext }: StepQuestionsProps)
           onClick={onNext}
           disabled={!allAnswered}
         >
-          Определить билд →
+          Определить билд <ArrowRight size={15} style={{ marginLeft: 4 }} />
         </button>
       </div>
     </div>
