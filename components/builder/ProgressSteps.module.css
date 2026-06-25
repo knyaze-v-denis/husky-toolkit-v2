@@ -1,8 +1,7 @@
 .row {
   display: flex;
   align-items: center;
-  padding: 16px 16px 0;
-  width: 100%;
+  margin-bottom: 10px;
 }
 
 .itemWrap {
@@ -78,5 +77,5 @@
 
 @media (max-width: 720px) {
   .label { display: none; }
-  .active .label { display: block; }
+  .item.active .label { display: block; font-size: 11px; }
 }

@@ -47,7 +47,9 @@ export function Layout({ children }: LayoutProps) {
       <Sidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
 
       <main className={styles.main}>
-        {children}
+        <div className={styles.content}>
+          {children}
+        </div>
       </main>
     </div>
   );

@@ -44,7 +44,7 @@ export function ChecklistView({ mode }: ChecklistViewProps) {
 
       <div className={styles.info}>{INFO[mode]}</div>
 
-      <div style={{ padding: '0 16px 24px', maxWidth: 720, width: '100%', margin: '0 auto' }}>
+      <div>
         {cl.blocks.map(block => (
           <div key={block.title} className={styles.block}>
             <div
