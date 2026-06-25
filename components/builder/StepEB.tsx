@@ -29,6 +29,7 @@ export function StepEB({
       <div className={styles.block}>
         <div className={styles.blockHead} style={{ background: b.color, color: b.tc }}>
           <span>Объём работ</span>
+          <span className={styles.blockHint}>Определено автоматически</span>
         </div>
         <div className={`${styles.optRow} ${styles.optActive}`}>
           <div className={`${styles.radio} ${styles.radioActive}`} />

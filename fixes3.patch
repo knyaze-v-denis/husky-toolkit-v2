@@ -1,0 +1,215 @@
+From 462a87b55ae5e5a6c5dcb5a4e4f147de583a5e38 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 25 Jun 2026 14:12:57 +0000
+Subject: [PATCH] Fix sticky header bg, result cards, EB step hint, gray active
+ states
+
+---
+ app/builder/page.module.css                   |  6 +-
+ components/builder/PageHeader.module.css      |  6 +-
+ components/builder/StepEB.module.css          |  2 +-
+ components/builder/StepEB.tsx                 |  1 +
+ components/builder/StepResult.tsx             | 67 +++++++++----------
+ components/checklist/ChecklistView.module.css |  2 +-
+ 6 files changed, 41 insertions(+), 43 deletions(-)
+
+diff --git a/app/builder/page.module.css b/app/builder/page.module.css
+index 026f36f..23f8557 100644
+--- a/app/builder/page.module.css
++++ b/app/builder/page.module.css
+@@ -1,13 +1,15 @@
+ .stickyWrap {
+   position: sticky;
+-  top: 1.5rem;
++  top: 0;
+   z-index: 10;
+   background: #f7f7f5;
++  padding-top: 1.5rem;
+   padding-bottom: 4px;
+ }
+ 
+ @media (max-width: 720px) {
+   .stickyWrap {
+-    top: calc(52px + 0.75rem);
++    top: 52px;
++    padding-top: 0.75rem;
+   }
+ }
+diff --git a/components/builder/PageHeader.module.css b/components/builder/PageHeader.module.css
+index 761228f..deed04a 100644
+--- a/components/builder/PageHeader.module.css
++++ b/components/builder/PageHeader.module.css
+@@ -8,7 +8,8 @@
+ 
+ .sticky {
+   position: sticky;
+-  top: 1.5rem;
++  top: 0;
++  padding-top: 1.5rem;
+   z-index: 10;
+ }
+ 
+@@ -72,6 +73,7 @@
+ 
+ @media (max-width: 720px) {
+   .sticky {
+-    top: calc(52px + 0.75rem);
++    top: 52px;
++    padding-top: 0.75rem;
+   }
+ }
+diff --git a/components/builder/StepEB.module.css b/components/builder/StepEB.module.css
+index b9a5007..c392e52 100644
+--- a/components/builder/StepEB.module.css
++++ b/components/builder/StepEB.module.css
+@@ -65,7 +65,7 @@
+ }
+ 
+ .optRow.optActive {
+-  background: #f7f6ff;
++  background: #f5f5f5;
+ }
+ 
+ .radio {
+diff --git a/components/builder/StepEB.tsx b/components/builder/StepEB.tsx
+index 17238cc..777a14b 100644
+--- a/components/builder/StepEB.tsx
++++ b/components/builder/StepEB.tsx
+@@ -29,6 +29,7 @@ export function StepEB({
+       <div className={styles.block}>
+         <div className={styles.blockHead} style={{ background: b.color, color: b.tc }}>
+           <span>Объём работ</span>
++          <span className={styles.blockHint}>Определено автоматически</span>
+         </div>
+         <div className={`${styles.optRow} ${styles.optActive}`}>
+           <div className={`${styles.radio} ${styles.radioActive}`} />
+diff --git a/components/builder/StepResult.tsx b/components/builder/StepResult.tsx
+index d4e602a..26aae29 100644
+--- a/components/builder/StepResult.tsx
++++ b/components/builder/StepResult.tsx
+@@ -50,29 +50,26 @@ export function StepResult({
+   return (
+     <div className={styles.wrap}>
+ 
+-      {/* Билд */}
++      {/* Билд — без баллов, с описанием */}
+       <div className={styles.buildCard} style={{ background: b.color }}>
+         <div className={styles.buildLabel} style={{ color: b.tc }}>Билд проектирования</div>
+         <div className={styles.buildName} style={{ color: b.tc }}>{b.name}</div>
+-        <div className={styles.buildRange} style={{ color: b.tc }}>
+-          Опросник: {fmtScore(qScore)} баллов · Диапазон: {b.range}
+-        </div>
++        <div className={styles.buildRange} style={{ color: b.tc }}>{b.desc}</div>
+       </div>
+ 
+-      {/* Размер ЭБ — выровнен по левому краю */}
++      {/* Размер ЭБ — без баллов */}
+       <div className={styles.ebCard} style={{ background: sc.bg }}>
+         <div className={styles.ebLabel} style={{ color: sc.tc }}>Размер ЭБ</div>
+         <div className={styles.ebSize} style={{ color: sc.tc }}>{ebSize.size}</div>
+         <div className={styles.ebTime} style={{ color: sc.tc }}>{ebSize.time}</div>
+-        <div className={styles.ebRange} style={{ color: sc.tc }}>{ebSize.range}</div>
+       </div>
+ 
+-      {/* Расчёт баллов */}
++      {/* Расчёт размера ЭБ */}
+       <div className={styles.block}>
+-        <div className={styles.blockTitle}>Расчёт объёма ЭБ</div>
++        <div className={styles.blockTitle}>Расчёт размера ЭБ</div>
+         <div className={styles.row}>
+-          <span>Базовый объём билда</span>
+-          <span className={styles.pts}>{b.ebVol}</span>
++          <span>Билд проектирования: {b.name}</span>
++          <span className={styles.pts}>+{b.ebVol}</span>
+         </div>
+         <div className={styles.row}>
+           <span>Сложность: {cpLabel}</span>
+@@ -91,17 +88,17 @@ export function StepResult({
+           </span>
+         </div>
+ 
++        {/* Все выбранные риски */}
+         {RISK_GROUPS.map(g => {
+-          const sel = (risks[g.label] ?? []).filter(v => {
+-            const item = g.items.find(i => i.v === v);
+-            return item && !item.none;
+-          });
++          const sel = risks[g.label] ?? [];
++          if (sel.length === 0) return null;
+           return sel.map(v => {
+-            const item = g.items.find(i => i.v === v)!;
++            const item = g.items.find(i => i.v === v);
++            if (!item) return null;
+             return (
+               <div key={v} className={styles.row}>
+-                <span>Риск: {item.l}</span>
+-                <span className={styles.pts}>+{item.p}</span>
++                <span>Риск ({g.label}): {item.l}</span>
++                <span className={styles.pts}>{item.p > 0 ? `+${item.p}` : '—'}</span>
+               </div>
+             );
+           });
+@@ -117,31 +114,27 @@ export function StepResult({
+       {reqArts.length > 0 && (
+         <div className={styles.block}>
+           <div className={styles.blockTitle}>Обязательные артефакты</div>
+-          <div>
+-            {reqArts.map((art, i) => (
+-              <div key={i} className={styles.artRow}>
+-                <span className={styles.artName}>{art.n}</span>
+-                <span className={`${styles.artStatus} ${styles[STATUS_CLASS[art.s]]}`}>
+-                  {STATUS_LABEL[art.s]}
+-                </span>
+-              </div>
+-            ))}
+-          </div>
++          {reqArts.map((art, i) => (
++            <div key={i} className={styles.artRow}>
++              <span className={styles.artName}>{art.n}</span>
++              <span className={`${styles.artStatus} ${styles[STATUS_CLASS[art.s]]}`}>
++                {STATUS_LABEL[art.s]}
++              </span>
++            </div>
++          ))}
+         </div>
+       )}
+       {optArts.length > 0 && (
+         <div className={styles.block}>
+           <div className={styles.blockTitle}>Дополнительные артефакты</div>
+-          <div>
+-            {optArts.map((art, i) => (
+-              <div key={i} className={`${styles.artRow} ${art.s === 'no' ? styles.artMuted : ''}`}>
+-                <span className={styles.artName}>{art.n}</span>
+-                <span className={`${styles.artStatus} ${styles[STATUS_CLASS[art.s]]}`}>
+-                  {STATUS_LABEL[art.s]}
+-                </span>
+-              </div>
+-            ))}
+-          </div>
++          {optArts.map((art, i) => (
++            <div key={i} className={`${styles.artRow} ${art.s === 'no' ? styles.artMuted : ''}`}>
++              <span className={styles.artName}>{art.n}</span>
++              <span className={`${styles.artStatus} ${styles[STATUS_CLASS[art.s]]}`}>
++                {STATUS_LABEL[art.s]}
++              </span>
++            </div>
++          ))}
+         </div>
+       )}
+ 
+diff --git a/components/checklist/ChecklistView.module.css b/components/checklist/ChecklistView.module.css
+index a369657..46ac551 100644
+--- a/components/checklist/ChecklistView.module.css
++++ b/components/checklist/ChecklistView.module.css
+@@ -38,7 +38,7 @@
+ }
+ 
+ .item.checked {
+-  background: #f9f9ff;
++  background: #f5f5f5;
+ }
+ 
+ .check {
+-- 
+2.43.0
+
