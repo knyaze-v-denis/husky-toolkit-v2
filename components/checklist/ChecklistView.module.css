@@ -1,0 +1,106 @@
+.info {
+  padding: 0 16px 12px;
+  font-size: 13px;
+  color: #888;
+  max-width: 720px;
+}
+
+.block {
+  background: #fff;
+  border: 0.5px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.blockHead {
+  padding: 11px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  border-bottom: 0.5px solid rgba(0,0,0,0.06);
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 0.5px solid #f0f0f0;
+  transition: background 0.1s;
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.item:hover {
+  background: #fafafa;
+}
+
+.item.checked {
+  background: #f9f9ff;
+}
+
+.check {
+  width: 17px;
+  height: 17px;
+  border-radius: 4px;
+  border: 1.5px solid #d0d0d0;
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.check.checkOn {
+  background: #3C3489;
+  border-color: #3C3489;
+}
+
+.itemBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.itemText {
+  font-size: 13px;
+  color: #1a1a1a;
+  line-height: 1.4;
+}
+
+.itemHint {
+  font-size: 12px;
+  color: #999;
+  margin-top: 3px;
+  line-height: 1.4;
+}
+
+.req {
+  color: #c4621a;
+  margin-right: 4px;
+  font-size: 11px;
+}
+
+.footnote {
+  font-size: 12px;
+  color: #aaa;
+  padding-top: 4px;
+}
+
+.resetBtn {
+  font-size: 12px;
+  font-family: inherit;
+  color: #888;
+  background: transparent;
+  border: 0.5px solid #d8d8d8;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.resetBtn:hover {
+  background: #f5f5f5;
+}
