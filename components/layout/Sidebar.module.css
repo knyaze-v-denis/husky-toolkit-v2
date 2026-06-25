@@ -1,0 +1,76 @@
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: white;
+  border-right: 0.5px solid #e0e0e0;
+  padding: 1.25rem 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 1rem 1.25rem;
+  border-bottom: 0.5px solid #eee;
+  margin-bottom: 0.75rem;
+}
+
+.logoName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+}
+
+.logoSub {
+  font-size: 11px;
+  color: #aaa;
+}
+
+.section {
+  padding: 0 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.sectionLabel {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #bbb;
+  padding: 0.5rem 0.5rem 0.35rem;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+  transition: all .15s;
+  text-decoration: none;
+}
+
+.navItem:hover {
+  background: #f5f5f0;
+  color: #111;
+}
+
+.navItem.active {
+  background: #EEEDFE;
+  color: #3C3489;
+}
+
+.navIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}

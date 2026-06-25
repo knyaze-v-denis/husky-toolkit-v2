@@ -1,0 +1,12 @@
+.banner {
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.info { background: #EEEDFE; color: #3C3489; }
+.ok   { background: #EAF3DE; color: #27500A; }
+.warn { background: #FAEEDA; color: #633806; }
+.bad  { background: #FCEBEB; color: #791F1F; }

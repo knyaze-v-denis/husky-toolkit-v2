@@ -1,0 +1,68 @@
+.wrap {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #f7f7f5;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hdr {
+  background: #3C3489;
+  border-radius: 12px;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.badge {
+  background: rgba(255,255,255,0.18);
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  margin-left: 16px;
+  flex-shrink: 0;
+}
+
+.progressBar {
+  height: 4px;
+  background: #e0e0e0;
+  border-radius: 2px;
+}
+
+.progressFill {
+  height: 4px;
+  border-radius: 2px;
+  background: #534AB7;
+  transition: width .3s;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #888;
+  padding-bottom: 10px;
+  border-bottom: 0.5px solid #e8e8e8;
+}
+
+.statsText { flex: 1; }
+
+.statsRight {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
