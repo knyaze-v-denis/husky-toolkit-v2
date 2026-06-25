@@ -1,0 +1,166 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.baseCard {
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.baseLabel {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.baseValue {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.block {
+  background: #fff;
+  border: 0.5px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.blockHead {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-weight: 600;
+  font-size: 13px;
+  border-bottom: 0.5px solid rgba(0,0,0,0.06);
+}
+
+.blockHint {
+  font-size: 11.5px;
+  font-weight: 400;
+  opacity: 0.7;
+  line-height: 1.4;
+}
+
+.optRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 0.5px solid #f0f0f0;
+  transition: background 0.1s;
+}
+
+.optRow:last-child {
+  border-bottom: none;
+}
+
+.optRow:hover {
+  background: #fafafa;
+}
+
+.optRow.optActive {
+  background: #f7f6ff;
+}
+
+.radio {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid #d0d0d0;
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition: border-color 0.12s;
+}
+
+.radio.radioActive {
+  border: 5px solid #3C3489;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1.5px solid #d0d0d0;
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.checkbox.checkboxActive {
+  background: #3C3489;
+  border-color: #3C3489;
+}
+
+.optText {
+  flex: 1;
+  min-width: 0;
+}
+
+.optLabel {
+  font-size: 13px;
+  color: #1a1a1a;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.optSub {
+  font-size: 11.5px;
+  color: #888;
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.optPoints {
+  font-size: 12px;
+  font-weight: 600;
+  color: #888;
+  flex-shrink: 0;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.backBtn {
+  padding: 10px 18px;
+  font-size: 14px;
+  font-family: inherit;
+  background: transparent;
+  color: #555;
+  border: 0.5px solid #d8d8d8;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.backBtn:hover {
+  background: #f5f5f5;
+}
+
+.nextBtn {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  background: #3C3489;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.nextBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
