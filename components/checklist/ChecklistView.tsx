@@ -5,6 +5,13 @@ import { useChecklist } from '@/lib/hooks/useChecklist';
 import { PageHeader } from '@/components/builder/PageHeader';
 import styles from './ChecklistView.module.css';
 
+function hexToRgba(hex: string, alpha: number): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
 interface ChecklistViewProps {
   mode: ChecklistMode;
 }
@@ -46,7 +53,11 @@ export function ChecklistView({ mode }: ChecklistViewProps) {
 
       <div>
         {cl.blocks.map(block => (
-          <div key={block.title} className={styles.block}>
+          <div
+            key={block.title}
+            className={styles.block}
+            style={{ '--active-bg': hexToRgba(block.color, 0.3), '--active-color': block.tc } as React.CSSProperties}
+          >
             <div
               className={styles.blockHead}
               style={{ background: block.color, color: block.tc }}

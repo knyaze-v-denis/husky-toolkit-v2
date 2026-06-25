@@ -38,7 +38,7 @@
 }
 
 .item.checked {
-  background: #f5f5f5;
+  background: var(--active-bg, #f5f5f5);
 }
 
 .check {
@@ -55,8 +55,8 @@
 }
 
 .check.checkOn {
-  background: #3C3489;
-  border-color: #3C3489;
+  background: var(--active-color, #3C3489);
+  border-color: var(--active-color, #3C3489);
 }
 
 .itemBody {
