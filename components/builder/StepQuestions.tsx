@@ -36,7 +36,7 @@ export function StepQuestions({ answers, onAnswer, onNext }: StepQuestionsProps)
                   className={`${styles.btn} ${current === 'maybe' ? styles.active : ''}`}
                   onClick={() => onAnswer(q.id, 'maybe')}
                 >
-                  Возможно
+                  Требуются уточнения
                 </button>
               )}
               <button

@@ -24,6 +24,8 @@ const STATUS_CLASS: Record<ArtStatus, string> = {
 
 export function StepArtifacts({ build, onNext, onBack }: StepArtifactsProps) {
   const b = BUILDS[build];
+  const reqArts = b.arts.filter(a => a.s === 'req');
+  const optArts = b.arts.filter(a => a.s !== 'req');
 
   return (
     <div className={styles.wrap}>
@@ -36,20 +38,39 @@ export function StepArtifacts({ build, onNext, onBack }: StepArtifactsProps) {
         <div className={styles.buildDesc} style={{ color: b.tc }}>{b.desc}</div>
       </div>
 
-      {/* Артефакты */}
-      <div className={styles.block}>
-        <div className={styles.blockTitle}>Артефакты проектирования</div>
-        <div className={styles.artList}>
-          {b.arts.map((art, i) => (
-            <div key={i} className={`${styles.artRow} ${art.s === 'no' ? styles.muted : ''}`}>
-              <span className={styles.artName}>{art.n}</span>
-              <span className={`${styles.artStatus} ${styles[STATUS_CLASS[art.s]]}`}>
-                {STATUS_LABEL[art.s]}
-              </span>
-            </div>
-          ))}
+      {/* Обязательные артефакты */}
+      {reqArts.length > 0 && (
+        <div className={styles.block}>
+          <div className={styles.blockTitle}>Обязательные артефакты</div>
+          <div className={styles.artList}>
+            {reqArts.map((art, i) => (
+              <div key={i} className={styles.artRow}>
+                <span className={styles.artName}>{art.n}</span>
+                <span className={`${styles.artStatus} ${styles[STATUS_CLASS[art.s]]}`}>
+                  {STATUS_LABEL[art.s]}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Опциональные и не нужные артефакты */}
+      {optArts.length > 0 && (
+        <div className={styles.block}>
+          <div className={styles.blockTitle}>Дополнительные артефакты</div>
+          <div className={styles.artList}>
+            {optArts.map((art, i) => (
+              <div key={i} className={`${styles.artRow} ${art.s === 'no' ? styles.muted : ''}`}>
+                <span className={styles.artName}>{art.n}</span>
+                <span className={`${styles.artStatus} ${styles[STATUS_CLASS[art.s]]}`}>
+                  {STATUS_LABEL[art.s]}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className={styles.footer}>
         <button className={styles.backBtn} onClick={onBack}><ArrowLeft size={15} style={{ marginRight: 4 }} />Назад</button>

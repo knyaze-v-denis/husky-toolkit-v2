@@ -25,10 +25,19 @@ export function StepEB({
   return (
     <div className={styles.wrap}>
 
-      {/* Базовый объём */}
-      <div className={styles.baseCard} style={{ background: b.color }}>
-        <span className={styles.baseLabel} style={{ color: b.tc }}>Базовый объём билда</span>
-        <span className={styles.baseValue} style={{ color: b.tc }}>{b.ebVol} ЭБ</span>
+      {/* Объём работ */}
+      <div className={styles.block}>
+        <div className={styles.blockHead} style={{ background: b.color, color: b.tc }}>
+          <span>Объём работ</span>
+        </div>
+        <div className={`${styles.optRow} ${styles.optActive}`}>
+          <div className={`${styles.radio} ${styles.radioActive}`} />
+          <div className={styles.optText}>
+            <div className={styles.optLabel}>{b.name} билд</div>
+            <div className={styles.optSub}>{b.desc}</div>
+          </div>
+          <div className={styles.optPoints}>+{b.ebVol}</div>
+        </div>
       </div>
 
       {/* Сложность */}

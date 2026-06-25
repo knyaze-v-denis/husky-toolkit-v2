@@ -1,12 +1,15 @@
 .wrap {
-  position: sticky;
-  top: 0;
-  z-index: 10;
   background: #f7f7f5;
   padding-bottom: 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.sticky {
+  position: sticky;
+  top: 1.5rem;
+  z-index: 10;
 }
 
 .hdr {
@@ -59,16 +62,16 @@
   border-bottom: 0.5px solid #e8e8e8;
 }
 
-@media (max-width: 720px) {
-  .wrap {
-    top: 52px;
-  }
-}
-
 .statsText { flex: 1; }
 
 .statsRight {
   display: flex;
   gap: 12px;
   align-items: center;
+}
+
+@media (max-width: 720px) {
+  .sticky {
+    top: calc(52px + 0.75rem);
+  }
 }
