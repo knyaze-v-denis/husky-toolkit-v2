@@ -31,10 +31,9 @@ export function StepArtifacts({ build, onNext, onBack }: StepArtifactsProps) {
     <div className={styles.wrap}>
       {/* Карточка билда */}
       <div className={styles.buildCard} style={{ background: b.color }}>
-        <div className={styles.buildMeta}>
-          <span className={styles.buildType} style={{ color: b.tc }}>{b.type}</span>
-        </div>
-        <div className={styles.buildName} style={{ color: b.tc }}>{b.name} билд</div>
+        <div className={styles.buildLabel} style={{ color: b.tc }}>Билд проектирования</div>
+        <div className={styles.buildName} style={{ color: b.tc }}>{b.name}</div>
+        <div className={styles.buildType} style={{ color: b.tc }}>{b.type}</div>
         <div className={styles.buildDesc} style={{ color: b.tc }}>{b.desc}</div>
       </div>
 

@@ -15,6 +15,13 @@ interface StepEBProps {
   onBack: () => void;
 }
 
+function hexToRgba(hex: string, alpha: number): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
 export function StepEB({
   build, complexity, novelty, risks,
   onFactor, onRisk, onNext, onBack,
@@ -26,7 +33,7 @@ export function StepEB({
     <div className={styles.wrap}>
 
       {/* Объём работ */}
-      <div className={styles.block}>
+      <div className={styles.block} style={{ '--active-bg': hexToRgba(b.color, 0.35), '--active-color': b.tc } as React.CSSProperties}>
         <div className={styles.blockHead} style={{ background: b.color, color: b.tc }}>
           <span>Объём работ</span>
           <span className={styles.blockHint}>Определено автоматически</span>
@@ -42,7 +49,7 @@ export function StepEB({
       </div>
 
       {/* Сложность */}
-      <div className={styles.block}>
+      <div className={styles.block} style={{ '--active-bg': hexToRgba(EB_COMPLEXITY.color, 0.45), '--active-color': EB_COMPLEXITY.tc } as React.CSSProperties}>
         <div
           className={styles.blockHead}
           style={{ background: EB_COMPLEXITY.color, color: EB_COMPLEXITY.tc }}
@@ -70,7 +77,7 @@ export function StepEB({
       </div>
 
       {/* Новизна */}
-      <div className={styles.block}>
+      <div className={styles.block} style={{ '--active-bg': hexToRgba(EB_NOVELTY.color, 0.45), '--active-color': EB_NOVELTY.tc } as React.CSSProperties}>
         <div
           className={styles.blockHead}
           style={{ background: EB_NOVELTY.color, color: EB_NOVELTY.tc }}
@@ -98,7 +105,7 @@ export function StepEB({
       </div>
 
       {/* Риски */}
-      <div className={styles.block}>
+      <div className={styles.block} style={{ '--active-bg': 'rgba(60,52,137,0.08)', '--active-color': '#3C3489' } as React.CSSProperties}>
         <div className={styles.blockHead} style={{ background: '#ECEAF8', color: '#3C3489' }}>
           <span>Риски</span>
         </div>

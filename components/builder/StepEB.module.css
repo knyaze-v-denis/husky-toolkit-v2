@@ -65,7 +65,7 @@
 }
 
 .optRow.optActive {
-  background: #f5f5f5;
+  background: var(--active-bg, #f5f5f5);
 }
 
 .radio {
@@ -79,7 +79,7 @@
 }
 
 .radio.radioActive {
-  border: 5px solid #3C3489;
+  border: 5px solid var(--active-color, #3C3489);
 }
 
 .checkbox {
@@ -96,8 +96,8 @@
 }
 
 .checkbox.checkboxActive {
-  background: #3C3489;
-  border-color: #3C3489;
+  background: var(--active-color, #3C3489);
+  border-color: var(--active-color, #3C3489);
 }
 
 .optText {
