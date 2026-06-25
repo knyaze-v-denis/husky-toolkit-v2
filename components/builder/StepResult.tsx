@@ -1,6 +1,7 @@
 'use client';
 
 import { ArrowLeft, Download, AlertTriangle } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 import { BUILDS, EB_COMPLEXITY, EB_NOVELTY, RISK_GROUPS, fmtScore, type BuildType, type ArtStatus } from '@/lib/data/builder';
 import styles from './StepResult.module.css';
 
@@ -141,12 +142,10 @@ export function StepResult({
       )}
 
       <div className={styles.footer}>
-        <button className={styles.backBtn} onClick={onBack}><ArrowLeft size={15} style={{ marginRight: 4 }} />Назад</button>
+        <Button variant="secondary" onClick={onBack}><ArrowLeft size={15} />Назад</Button>
         <div className={styles.footerRight}>
-          <button className={styles.pdfBtn} onClick={() => window.print()}>
-            <Download size={14} style={{ marginRight: 4 }} />PDF
-          </button>
-          <button className={styles.resetBtn} onClick={onReset}>Новая оценка</button>
+          <Button variant="secondary" onClick={() => window.print()}><Download size={14} />PDF</Button>
+          <Button variant="primary" onClick={onReset}>Новая оценка</Button>
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@
 
 import { ArrowRight } from 'lucide-react';
 import { QUESTIONS, type Answer } from '@/lib/data/builder';
+import { Button } from '@/components/ui/Button';
 import styles from './StepQuestions.module.css';
 
 interface StepQuestionsProps {
@@ -51,13 +52,9 @@ export function StepQuestions({ answers, onAnswer, onNext }: StepQuestionsProps)
       })}
 
       <div className={styles.footer}>
-        <button
-          className={styles.nextBtn}
-          onClick={onNext}
-          disabled={!allAnswered}
-        >
-          Определить билд <ArrowRight size={15} style={{ marginLeft: 4 }} />
-        </button>
+        <Button variant="primary" onClick={onNext} disabled={!allAnswered}>
+          Определить билд <ArrowRight size={15} />
+        </Button>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@
 
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { EB_COMPLEXITY, EB_NOVELTY, RISK_GROUPS, BUILDS, type BuildType } from '@/lib/data/builder';
+import { Button } from '@/components/ui/Button';
 import styles from './StepEB.module.css';
 
 interface StepEBProps {
@@ -105,8 +106,8 @@ export function StepEB({
       </div>
 
       {/* Риски */}
-      <div className={styles.block} style={{ '--active-bg': 'rgba(60,52,137,0.08)', '--active-color': '#3C3489' } as React.CSSProperties}>
-        <div className={styles.blockHead} style={{ background: '#ECEAF8', color: '#3C3489' }}>
+      <div className={styles.block} style={{ '--active-bg': hexToRgba('#FAEEDA', 0.6), '--active-color': '#633806' } as React.CSSProperties}>
+        <div className={styles.blockHead} style={{ background: '#FAEEDA', color: '#633806' }}>
           <span>Риски</span>
         </div>
         {RISK_GROUPS.map((group, gi) => {
@@ -144,10 +145,8 @@ export function StepEB({
       </div>
 
       <div className={styles.footer}>
-        <button className={styles.backBtn} onClick={onBack}><ArrowLeft size={15} style={{ marginRight: 4 }} />Назад</button>
-        <button className={styles.nextBtn} onClick={onNext} disabled={!canNext}>
-          Итог<ArrowRight size={15} style={{ marginLeft: 4 }} />
-        </button>
+        <Button variant="secondary" onClick={onBack}><ArrowLeft size={15} />Назад</Button>
+        <Button variant="primary" onClick={onNext} disabled={!canNext}>Итог<ArrowRight size={15} /></Button>
       </div>
     </div>
   );
