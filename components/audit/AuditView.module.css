@@ -1,6 +1,8 @@
 .wrap {
-  padding: 0 16px 32px;
+  padding: 16px 16px 32px;
   max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 12px;

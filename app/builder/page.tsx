@@ -87,7 +87,7 @@ export default function BuilderPage() {
         statsLeft={statsLeft}
       />
 
-      <div style={{ padding: '16px', maxWidth: 720 }}>
+      <div style={{ padding: '16px', maxWidth: 720, width: '100%', margin: '0 auto' }}>
         {step === 1 && (
           <StepQuestions
             answers={answers}
