@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, Download } from 'lucide-react';
+import { ArrowLeft, Download, AlertTriangle } from 'lucide-react';
 import { BUILDS, EB_COMPLEXITY, EB_NOVELTY, RISK_GROUPS, fmtScore, type BuildType, type ArtStatus } from '@/lib/data/builder';
 import styles from './StepResult.module.css';
 
@@ -50,10 +50,11 @@ export function StepResult({
   return (
     <div className={styles.wrap}>
 
-      {/* Билд — без баллов, с описанием */}
+      {/* Билд */}
       <div className={styles.buildCard} style={{ background: b.color }}>
         <div className={styles.buildLabel} style={{ color: b.tc }}>Билд проектирования</div>
         <div className={styles.buildName} style={{ color: b.tc }}>{b.name}</div>
+        <div className={styles.buildType} style={{ color: b.tc }}>{b.type}</div>
         <div className={styles.buildRange} style={{ color: b.tc }}>{b.desc}</div>
       </div>
 
@@ -88,20 +89,21 @@ export function StepResult({
           </span>
         </div>
 
-        {/* Все выбранные риски */}
-        {RISK_GROUPS.map(g => {
+        {/* Выбранные риски (только не-none) */}
+        {RISK_GROUPS.flatMap(g => {
           const sel = risks[g.label] ?? [];
-          if (sel.length === 0) return null;
-          return sel.map(v => {
-            const item = g.items.find(i => i.v === v);
-            if (!item) return null;
-            return (
-              <div key={v} className={styles.row}>
-                <span>Риск ({g.label}): {item.l}</span>
+          return sel
+            .map(v => g.items.find(i => i.v === v))
+            .filter((item): item is NonNullable<typeof item> => !!item && !item.none)
+            .map(item => (
+              <div key={`${g.label}-${item.v}`} className={styles.row}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <AlertTriangle size={13} style={{ flexShrink: 0, opacity: 0.7 }} />
+                  Риск ({g.label}): {item.l}
+                </span>
                 <span className={styles.pts}>{item.p > 0 ? `+${item.p}` : '—'}</span>
               </div>
-            );
-          });
+            ));
         })}
 
         <div className={`${styles.row} ${styles.total}`}>

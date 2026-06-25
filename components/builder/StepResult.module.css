@@ -21,7 +21,14 @@
 .buildName {
   font-size: 22px;
   font-weight: 700;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
+}
+
+.buildType {
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.7;
+  margin-bottom: 6px;
 }
 
 .buildRange {
