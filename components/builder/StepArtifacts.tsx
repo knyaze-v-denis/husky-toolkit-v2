@@ -2,6 +2,7 @@
 
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { BUILDS, type BuildType, type ArtStatus } from '@/lib/data/builder';
+import { Button } from '@/components/ui/Button';
 import styles from './StepArtifacts.module.css';
 
 interface StepArtifactsProps {
@@ -72,8 +73,8 @@ export function StepArtifacts({ build, onNext, onBack }: StepArtifactsProps) {
       )}
 
       <div className={styles.footer}>
-        <button className={styles.backBtn} onClick={onBack}><ArrowLeft size={15} style={{ marginRight: 4 }} />Назад</button>
-        <button className={styles.nextBtn} onClick={onNext}>Оценить ЭБ<ArrowRight size={15} style={{ marginLeft: 4 }} /></button>
+        <Button variant="secondary" onClick={onBack}><ArrowLeft size={15} />Назад</Button>
+        <Button variant="primary" onClick={onNext}>Оценить ЭБ<ArrowRight size={15} /></Button>
       </div>
     </div>
   );
