@@ -29,19 +29,10 @@
   opacity: 0.7;
 }
 
+/* Карточка размера — левое выравнивание как у buildCard */
 .ebCard {
   border-radius: 12px;
   padding: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.ebRight {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  text-align: right;
 }
 
 .ebLabel {
@@ -50,6 +41,14 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   opacity: 0.65;
+  margin-bottom: 4px;
+}
+
+.ebSize {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 4px;
 }
 
 .ebTime {
@@ -60,12 +59,6 @@
 .ebRange {
   font-size: 12px;
   opacity: 0.7;
-}
-
-.ebSize {
-  font-size: 36px;
-  font-weight: 800;
-  letter-spacing: -1px;
 }
 
 .block {
@@ -115,6 +108,53 @@
 .total .pts {
   font-size: 15px;
   color: #3C3489;
+}
+
+/* Артефакты */
+.artRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  font-size: 13px;
+  border-bottom: 0.5px solid #f0f0f0;
+  gap: 12px;
+}
+
+.artRow:last-child {
+  border-bottom: none;
+}
+
+.artMuted {
+  opacity: 0.45;
+}
+
+.artName {
+  color: #1a1a1a;
+}
+
+.artStatus {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.artStatus.req {
+  background: #E1F5EE;
+  color: #085041;
+}
+
+.artStatus.opt {
+  background: #EEEDFE;
+  color: #3C3489;
+}
+
+.artStatus.no {
+  background: #f0f0f0;
+  color: #999;
 }
 
 .footer {

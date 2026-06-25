@@ -1,0 +1,13 @@
+.stickyWrap {
+  position: sticky;
+  top: 1.5rem;
+  z-index: 10;
+  background: #f7f7f5;
+  padding-bottom: 4px;
+}
+
+@media (max-width: 720px) {
+  .stickyWrap {
+    top: calc(52px + 0.75rem);
+  }
+}

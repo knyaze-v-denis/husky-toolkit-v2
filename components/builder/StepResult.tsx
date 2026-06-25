@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowLeft, Download } from 'lucide-react';
-import { BUILDS, EB_COMPLEXITY, EB_NOVELTY, RISK_GROUPS, fmtScore, type BuildType } from '@/lib/data/builder';
+import { BUILDS, EB_COMPLEXITY, EB_NOVELTY, RISK_GROUPS, fmtScore, type BuildType, type ArtStatus } from '@/lib/data/builder';
 import styles from './StepResult.module.css';
 
 interface StepResultProps {
@@ -15,6 +15,18 @@ interface StepResultProps {
   onBack: () => void;
   onReset: () => void;
 }
+
+const STATUS_LABEL: Record<ArtStatus, string> = {
+  req: 'Обязательно',
+  opt: 'Опционально',
+  no:  'Не нужно',
+};
+
+const STATUS_CLASS: Record<ArtStatus, string> = {
+  req: 'req',
+  opt: 'opt',
+  no:  'no',
+};
 
 export function StepResult({
   build, qScore, ebScore, complexity, novelty, risks,
@@ -32,6 +44,9 @@ export function StepResult({
   };
   const sc = sizeColors[ebSize.size] ?? sizeColors.SM;
 
+  const reqArts = b.arts.filter(a => a.s === 'req');
+  const optArts = b.arts.filter(a => a.s !== 'req');
+
   return (
     <div className={styles.wrap}>
 
@@ -44,17 +59,15 @@ export function StepResult({
         </div>
       </div>
 
-      {/* Размер ЭБ */}
+      {/* Размер ЭБ — выровнен по левому краю */}
       <div className={styles.ebCard} style={{ background: sc.bg }}>
+        <div className={styles.ebLabel} style={{ color: sc.tc }}>Размер ЭБ</div>
         <div className={styles.ebSize} style={{ color: sc.tc }}>{ebSize.size}</div>
-        <div className={styles.ebRight}>
-          <div className={styles.ebLabel} style={{ color: sc.tc }}>Размер ЭБ</div>
-          <div className={styles.ebTime} style={{ color: sc.tc }}>{ebSize.time}</div>
-          <div className={styles.ebRange} style={{ color: sc.tc }}>{ebSize.range}</div>
-        </div>
+        <div className={styles.ebTime} style={{ color: sc.tc }}>{ebSize.time}</div>
+        <div className={styles.ebRange} style={{ color: sc.tc }}>{ebSize.range}</div>
       </div>
 
-      {/* Баллы ЭБ */}
+      {/* Расчёт баллов */}
       <div className={styles.block}>
         <div className={styles.blockTitle}>Расчёт объёма ЭБ</div>
         <div className={styles.row}>
@@ -99,6 +112,38 @@ export function StepResult({
           <span className={styles.pts}>{fmtScore(ebScore)} баллов</span>
         </div>
       </div>
+
+      {/* Артефакты */}
+      {reqArts.length > 0 && (
+        <div className={styles.block}>
+          <div className={styles.blockTitle}>Обязательные артефакты</div>
+          <div>
+            {reqArts.map((art, i) => (
+              <div key={i} className={styles.artRow}>
+                <span className={styles.artName}>{art.n}</span>
+                <span className={`${styles.artStatus} ${styles[STATUS_CLASS[art.s]]}`}>
+                  {STATUS_LABEL[art.s]}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      {optArts.length > 0 && (
+        <div className={styles.block}>
+          <div className={styles.blockTitle}>Дополнительные артефакты</div>
+          <div>
+            {optArts.map((art, i) => (
+              <div key={i} className={`${styles.artRow} ${art.s === 'no' ? styles.artMuted : ''}`}>
+                <span className={styles.artName}>{art.n}</span>
+                <span className={`${styles.artStatus} ${styles[STATUS_CLASS[art.s]]}`}>
+                  {STATUS_LABEL[art.s]}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className={styles.footer}>
         <button className={styles.backBtn} onClick={onBack}><ArrowLeft size={15} style={{ marginRight: 4 }} />Назад</button>
