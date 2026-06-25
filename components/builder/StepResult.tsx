@@ -1,5 +1,6 @@
 'use client';
 
+import { ArrowLeft, Download } from 'lucide-react';
 import { BUILDS, EB_COMPLEXITY, EB_NOVELTY, RISK_GROUPS, fmtScore, type BuildType } from '@/lib/data/builder';
 import styles from './StepResult.module.css';
 
@@ -45,12 +46,12 @@ export function StepResult({
 
       {/* Размер ЭБ */}
       <div className={styles.ebCard} style={{ background: sc.bg }}>
-        <div className={styles.ebLeft}>
+        <div className={styles.ebSize} style={{ color: sc.tc }}>{ebSize.size}</div>
+        <div className={styles.ebRight}>
           <div className={styles.ebLabel} style={{ color: sc.tc }}>Размер ЭБ</div>
           <div className={styles.ebTime} style={{ color: sc.tc }}>{ebSize.time}</div>
           <div className={styles.ebRange} style={{ color: sc.tc }}>{ebSize.range}</div>
         </div>
-        <div className={styles.ebSize} style={{ color: sc.tc }}>{ebSize.size}</div>
       </div>
 
       {/* Баллы ЭБ */}
@@ -95,13 +96,18 @@ export function StepResult({
 
         <div className={`${styles.row} ${styles.total}`}>
           <span>Итого</span>
-          <span className={styles.pts}>{fmtScore(ebScore)} ЭБ</span>
+          <span className={styles.pts}>{fmtScore(ebScore)} баллов</span>
         </div>
       </div>
 
       <div className={styles.footer}>
-        <button className={styles.backBtn} onClick={onBack}>← Назад</button>
-        <button className={styles.resetBtn} onClick={onReset}>Новая оценка</button>
+        <button className={styles.backBtn} onClick={onBack}><ArrowLeft size={15} style={{ marginRight: 4 }} />Назад</button>
+        <div className={styles.footerRight}>
+          <button className={styles.pdfBtn} onClick={() => window.print()}>
+            <Download size={14} style={{ marginRight: 4 }} />PDF
+          </button>
+          <button className={styles.resetBtn} onClick={onReset}>Новая оценка</button>
+        </div>
       </div>
     </div>
   );

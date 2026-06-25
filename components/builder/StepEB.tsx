@@ -1,5 +1,6 @@
 'use client';
 
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { EB_COMPLEXITY, EB_NOVELTY, RISK_GROUPS, BUILDS, type BuildType } from '@/lib/data/builder';
 import styles from './StepEB.module.css';
 
@@ -87,44 +88,48 @@ export function StepEB({
       </div>
 
       {/* Риски */}
-      {RISK_GROUPS.map(group => {
-        const sel = risks[group.label] ?? [];
-        return (
-          <div key={group.label} className={styles.block}>
-            <div className={styles.blockHead} style={{ background: '#f5f5f5', color: '#555' }}>
-              <span>{group.label}</span>
+      <div className={styles.block}>
+        <div className={styles.blockHead} style={{ background: '#ECEAF8', color: '#3C3489' }}>
+          <span>Риски</span>
+        </div>
+        {RISK_GROUPS.map((group, gi) => {
+          const sel = risks[group.label] ?? [];
+          return (
+            <div key={group.label}>
+              {gi > 0 && <div className={styles.groupDivider} />}
+              <div className={styles.groupLabel}>{group.label}</div>
+              {group.items.map(item => {
+                const active = sel.includes(item.v);
+                return (
+                  <div
+                    key={item.v}
+                    className={`${styles.optRow} ${active ? styles.optActive : ''}`}
+                    onClick={() => onRisk(group.label, item.v, item.none)}
+                  >
+                    <div className={`${styles.checkbox} ${active ? styles.checkboxActive : ''}`}>
+                      {active && (
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                          <path d="M2 5l2.5 2.5L8 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      )}
+                    </div>
+                    <div className={styles.optText}>
+                      <div className={styles.optLabel}>{item.l}</div>
+                      {item.sub && <div className={styles.optSub}>{item.sub}</div>}
+                    </div>
+                    {item.p > 0 && <div className={styles.optPoints}>+{item.p}</div>}
+                  </div>
+                );
+              })}
             </div>
-            {group.items.map(item => {
-              const active = sel.includes(item.v);
-              return (
-                <div
-                  key={item.v}
-                  className={`${styles.optRow} ${active ? styles.optActive : ''}`}
-                  onClick={() => onRisk(group.label, item.v, item.none)}
-                >
-                  <div className={`${styles.checkbox} ${active ? styles.checkboxActive : ''}`}>
-                    {active && (
-                      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                        <path d="M2 5l2.5 2.5L8 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    )}
-                  </div>
-                  <div className={styles.optText}>
-                    <div className={styles.optLabel}>{item.l}</div>
-                    {item.sub && <div className={styles.optSub}>{item.sub}</div>}
-                  </div>
-                  {item.p > 0 && <div className={styles.optPoints}>+{item.p}</div>}
-                </div>
-              );
-            })}
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
 
       <div className={styles.footer}>
-        <button className={styles.backBtn} onClick={onBack}>← Назад</button>
+        <button className={styles.backBtn} onClick={onBack}><ArrowLeft size={15} style={{ marginRight: 4 }} />Назад</button>
         <button className={styles.nextBtn} onClick={onNext} disabled={!canNext}>
-          Итог →
+          Итог<ArrowRight size={15} style={{ marginLeft: 4 }} />
         </button>
       </div>
     </div>
