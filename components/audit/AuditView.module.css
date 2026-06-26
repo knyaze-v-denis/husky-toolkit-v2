@@ -455,8 +455,8 @@
 
 .pageTitle {
   font-size: 24px;
-  font-weight: 700;
-  line-height: 36px;
+  font-weight: 600;
+  line-height: 1.2;
   color: #1a1a1a;
   flex: 1;
   min-width: 0;
