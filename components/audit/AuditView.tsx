@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { CheckSquare, FileText, Info, ArrowRight, ScanSearch, Clock, ArrowLeft, Trash2 } from 'lucide-react';
+import { CheckSquare, FileText, Info, ArrowRight, ScanSearch, Clock, ArrowLeft, Trash2, Download } from 'lucide-react';
 import { useAudit, type AuditResult, type AuditEntry, type AuditForm } from '@/lib/hooks/useAudit';
 import { PageHeader } from '@/components/builder/PageHeader';
 import { Button } from '@/components/ui/Button';
@@ -14,7 +14,7 @@ const DISCLAIMER = 'Анализ проводит Claude Sonnet 4.6. Модел�
 
 const MOCK_FORM: AuditForm = {
   title: 'Управление записями РКТ — применение к табелю',
-  link: '',
+  link: 'https://tracker.example.com/TASK-1234',
   usAs: 'сотрудник с доступом к расписанию',
   usWant: 'применять к своему табелю доступную запись РКТ и автоназначать её другим сотрудникам',
   usTo: 'гибко настраивать учёт рабочего времени без дублирования данных',
@@ -211,6 +211,18 @@ function LoadingBlock() {
   );
 }
 
+// ─── BACK BUTTON (fixed, left gutter) ────────────────────────────
+
+function BackBtn({ onClick }: { onClick: () => void }) {
+  return (
+    <div className={styles.backBtnWrap}>
+      <Button variant="secondary" size="sm" onClick={onClick}>
+        <ArrowLeft size={15} />
+      </Button>
+    </div>
+  );
+}
+
 // ─── LIST VIEW ────────────────────────────────────────────────────
 
 export function AuditListView() {
@@ -222,6 +234,7 @@ export function AuditListView() {
       <PageHeader
         title="ИИ-аудит задачи"
         disclaimer={{ text: DISCLAIMER, variant: 'info' }}
+        sticky={false}
       />
       <div className={styles.wrap}>
         {hook.history.length === 0 ? (
@@ -233,9 +246,11 @@ export function AuditListView() {
           </div>
         ) : (
           <>
-            <div className={styles.listHeader}>
-              <span className={styles.listTitle}>Мои аудиты</span>
-              <Button variant="primary" onClick={() => router.push('/audit/new')}>Новый аудит</Button>
+            <div className={styles.pageRow}>
+              <span className={styles.pageTitle}>Мои аудиты</span>
+              <div className={styles.pageActions}>
+                <Button variant="primary" onClick={() => router.push('/audit/new')}>Новый аудит</Button>
+              </div>
             </div>
             <div className={styles.listWrap}>
               {hook.history.map(e => {
@@ -290,90 +305,80 @@ export function AuditFormView() {
     router.push(`/audit/${id}?fresh=1`);
   };
 
-  if (loading) {
-    return (
-      <>
-        <button className={styles.backBtn} onClick={() => router.back()} title="К списку аудитов">
-          <ArrowLeft size={18} />
-        </button>
-        <div>
-          <PageHeader title="Новый аудит" disclaimer={{ text: DISCLAIMER, variant: 'info' }} />
-          <div className={styles.wrap}>
-            <LoadingBlock />
-          </div>
-        </div>
-      </>
-    );
-  }
-
   return (
     <>
-      <button className={styles.backBtn} onClick={() => router.back()} title="К списку аудитов">
-        <ArrowLeft size={18} />
-      </button>
+      <BackBtn onClick={() => router.back()} />
       <div>
         <PageHeader
-          title="Новый аудит"
+          title="ИИ-аудит задачи"
           disclaimer={{ text: DISCLAIMER, variant: 'info' }}
-          banner={hook.error ? { text: hook.error, variant: 'bad' } : null}
+          banner={!loading && hook.error ? { text: hook.error, variant: 'bad' } : null}
+          sticky={false}
         />
         <div className={styles.wrap}>
-          <InstructionBlock />
-          <div className={styles.form}>
-            <div className={styles.field}>
-              <label className={styles.label}>
-                Название задачи<span className={styles.reqDot} />
-              </label>
-              <input
-                className={styles.input}
-                placeholder="Например: Добавить фильтр в таблицу"
-                value={hook.form.title}
-                onChange={e => hook.updateForm({ title: e.target.value })}
-              />
-            </div>
-            <div className={styles.field}>
-              <label className={styles.label}>Ссылка на задачу</label>
-              <input
-                className={styles.input}
-                placeholder="https://..."
-                value={hook.form.link}
-                onChange={e => hook.updateForm({ link: e.target.value })}
-              />
-            </div>
-            <div className={styles.field}>
-              <label className={styles.label}>User Story</label>
-              <div className={styles.usGroup}>
-                <div className={styles.usField}>
-                  <span className={styles.usPrefix}>Как</span>
-                  <input className={styles.usInput} placeholder="роль пользователя" value={hook.form.usAs} onChange={e => hook.updateForm({ usAs: e.target.value })} />
-                </div>
-                <div className={styles.usField}>
-                  <span className={styles.usPrefix}>Я хочу</span>
-                  <input className={styles.usInput} placeholder="действие или функциональность" value={hook.form.usWant} onChange={e => hook.updateForm({ usWant: e.target.value })} />
-                </div>
-                <div className={styles.usField}>
-                  <span className={styles.usPrefix}>Чтобы</span>
-                  <input className={styles.usInput} placeholder="ценность или цель" value={hook.form.usTo} onChange={e => hook.updateForm({ usTo: e.target.value })} />
+          <div className={styles.pageRow}>
+            <span className={styles.pageTitle}>Новый аудит</span>
+          </div>
+
+          {loading ? (
+            <LoadingBlock />
+          ) : (
+            <div className={styles.form}>
+              <div className={styles.field}>
+                <label className={styles.label}>
+                  Название задачи<span className={styles.reqDot} />
+                </label>
+                <input
+                  className={styles.input}
+                  placeholder="Например: Добавить фильтр в таблицу"
+                  value={hook.form.title}
+                  onChange={e => hook.updateForm({ title: e.target.value })}
+                />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Ссылка на задачу</label>
+                <input
+                  className={styles.input}
+                  placeholder="https://..."
+                  value={hook.form.link}
+                  onChange={e => hook.updateForm({ link: e.target.value })}
+                />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>User Story</label>
+                <div className={styles.usGroup}>
+                  <div className={styles.usField}>
+                    <span className={styles.usPrefix}>Как</span>
+                    <input className={styles.usInput} placeholder="роль пользователя" value={hook.form.usAs} onChange={e => hook.updateForm({ usAs: e.target.value })} />
+                  </div>
+                  <div className={styles.usField}>
+                    <span className={styles.usPrefix}>Я хочу</span>
+                    <input className={styles.usInput} placeholder="действие или функциональность" value={hook.form.usWant} onChange={e => hook.updateForm({ usWant: e.target.value })} />
+                  </div>
+                  <div className={styles.usField}>
+                    <span className={styles.usPrefix}>Чтобы</span>
+                    <input className={styles.usInput} placeholder="ценность или цель" value={hook.form.usTo} onChange={e => hook.updateForm({ usTo: e.target.value })} />
+                  </div>
                 </div>
               </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Описание задачи</label>
+                <textarea
+                  className={styles.textarea}
+                  rows={5}
+                  placeholder="Опишите задачу: контекст, пользователи, сценарии, ограничения…"
+                  value={hook.form.desc}
+                  onChange={e => hook.updateForm({ desc: e.target.value })}
+                />
+              </div>
+              <div className={styles.formActions}>
+                <Button variant="primary" fullWidth onClick={handleRun}>Запустить аудит</Button>
+                {process.env.NODE_ENV !== 'production' && (
+                  <Button variant="secondary" size="sm" onClick={handleMock}>Загрузить пример</Button>
+                )}
+              </div>
             </div>
-            <div className={styles.field}>
-              <label className={styles.label}>Описание задачи</label>
-              <textarea
-                className={styles.textarea}
-                rows={5}
-                placeholder="Опишите задачу: контекст, пользователи, сценарии, ограничения…"
-                value={hook.form.desc}
-                onChange={e => hook.updateForm({ desc: e.target.value })}
-              />
-            </div>
-            <div className={styles.formActions}>
-              <Button variant="primary" fullWidth onClick={handleRun}>Запустить аудит</Button>
-              {process.env.NODE_ENV !== 'production' && (
-                <Button variant="secondary" size="sm" onClick={handleMock}>Загрузить пример</Button>
-              )}
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </>
@@ -389,7 +394,7 @@ export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; 
   if (!entry) {
     return (
       <div>
-        <PageHeader title="ИИ-аудит задачи" disclaimer={{ text: DISCLAIMER, variant: 'info' }} />
+        <PageHeader title="ИИ-аудит задачи" disclaimer={{ text: DISCLAIMER, variant: 'info' }} sticky={false} />
         <div className={styles.wrap}>
           <div className={styles.emptyState}>
             <div className={styles.emptyTitle}>Аудит не найден</div>
@@ -401,25 +406,34 @@ export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; 
   }
 
   return (
-    <div>
-      <PageHeader title="ИИ-аудит задачи" disclaimer={{ text: DISCLAIMER, variant: 'info' }} />
-      <div className={styles.wrap}>
-        <div className={styles.reportHeader}>
-          <button className={styles.backIconBtn} onClick={() => router.back()} title="К списку аудитов">
-            <ArrowLeft size={18} />
-          </button>
-          <span className={styles.reportTitle}>{entry.title}</span>
-          <div className={styles.reportHeaderActions}>
-            <Button variant="secondary" onClick={() => window.print()}>Экспорт PDF</Button>
-            {isFresh && (
-              <Button variant="primary" onClick={() => { hook.resetAudit(); router.push('/audit/new'); }}>
-                Новый аудит
+    <>
+      <BackBtn onClick={() => router.back()} />
+      <div>
+        <PageHeader title="ИИ-аудит задачи" disclaimer={{ text: DISCLAIMER, variant: 'info' }} sticky={false} />
+        <div className={styles.wrap}>
+          <div className={styles.pageRow}>
+            <div className={styles.reportTitleCol}>
+              <span className={styles.pageTitle}>{entry.title}</span>
+              {entry.link && (
+                <a href={entry.link} target="_blank" rel="noreferrer" className={styles.reportLink}>
+                  {entry.link}
+                </a>
+              )}
+            </div>
+            <div className={styles.pageActions}>
+              <Button variant="secondary" onClick={() => window.print()}>
+                <Download size={13} />PDF
               </Button>
-            )}
+              {isFresh && (
+                <Button variant="secondary" onClick={() => { hook.resetAudit(); router.push('/audit/new'); }}>
+                  Новый аудит
+                </Button>
+              )}
+            </div>
           </div>
+          <ResultBody result={entry.result} />
         </div>
-        <ResultBody result={entry.result} />
       </div>
-    </div>
+    </>
   );
 }

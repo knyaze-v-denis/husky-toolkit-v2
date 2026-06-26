@@ -437,33 +437,16 @@
   margin-top: 1px;
 }
 
-/* Back button — fixed ghost icon, left of content area */
-.backBtn {
+/* Back button — fixed in left gutter, secondary style */
+.backBtnWrap {
   position: fixed;
-  left: calc(220px + 16px);
-  top: 50%;
-  transform: translateY(-50%);
+  left: calc(220px + 12px);
+  top: 172px;
   z-index: 5;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: none;
-  background: none;
-  color: #bbb;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.12s, color 0.12s;
 }
 
-.backBtn:hover {
-  background: rgba(0,0,0,0.06);
-  color: #444;
-}
-
-@media (max-width: 1080px) {
-  .backBtn { display: none; }
+@media (max-width: 1100px) {
+  .backBtnWrap { display: none; }
 }
 
 /* Form actions row */
@@ -473,67 +456,52 @@
   gap: 10px;
 }
 
-/* Report header row: back icon + title + actions */
-.reportHeader {
-  background: #fff;
-  border: 0.5px solid #e0e0e0;
-  border-radius: 12px;
-  padding: 12px 16px;
+/* Shared page heading row (list with items, form, report) */
+.pageRow {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
+  padding: 4px 0;
 }
 
-.backIconBtn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: none;
-  color: #aaa;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: background 0.12s, color 0.12s;
-}
-
-.backIconBtn:hover {
-  background: rgba(0,0,0,0.06);
-  color: #333;
-}
-
-.reportTitle {
-  flex: 1;
-  font-size: 14px;
-  font-weight: 600;
+.pageTitle {
+  font-size: 20px;
+  font-weight: 700;
   color: #1a1a1a;
+  flex: 1;
   min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.reportHeaderActions {
+.pageActions {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
 }
 
-/* List header row: title + new audit button */
-.listHeader {
+/* Report title column (title + link) */
+.reportTitleCol {
+  flex: 1;
+  min-width: 0;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 2px;
+  flex-direction: column;
+  gap: 3px;
 }
 
-.listTitle {
-  font-size: 15px;
-  font-weight: 600;
-  color: #1a1a1a;
+.reportLink {
+  font-size: 11px;
+  color: #aaa;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.1s;
+}
+
+.reportLink:hover {
+  color: var(--primary);
+  text-decoration: underline;
 }
 
 /* Button in purple header row */
