@@ -3,6 +3,7 @@
 import { ArrowLeft, Download, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { BUILDS, EB_COMPLEXITY, EB_NOVELTY, RISK_GROUPS, fmtScore, STATUS_LABEL, STATUS_CLASS, type BuildType } from '@/lib/data/builder';
+import { exportBuilderPDF } from '@/lib/pdf/builderPdf';
 import styles from './StepResult.module.css';
 import artStyles from '@/components/ui/ArtStatus.module.css';
 
@@ -135,7 +136,7 @@ export function StepResult({
       <div className={styles.footer}>
         <Button variant="secondary" onClick={onBack}><ArrowLeft size={15} />Назад</Button>
         <div className={styles.footerRight}>
-          <Button variant="secondary" onClick={() => window.print()}><Download size={14} />PDF</Button>
+          <Button variant="secondary" onClick={() => exportBuilderPDF({ build, ebScore, complexity, novelty, risks, ebSize })}><Download size={14} />PDF</Button>
           <Button variant="primary" onClick={onReset}>Новая оценка</Button>
         </div>
       </div>

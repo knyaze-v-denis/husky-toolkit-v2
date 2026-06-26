@@ -2,6 +2,7 @@
 
 import { Download } from 'lucide-react';
 import { CHECKLISTS, type ChecklistMode } from '@/lib/data/checklists';
+import { exportChecklistPDF } from '@/lib/pdf/checklistPdf';
 import { useChecklist } from '@/lib/hooks/useChecklist';
 import { PageHeader } from '@/components/builder/PageHeader';
 import { Button } from '@/components/ui/Button';
@@ -47,7 +48,7 @@ export function ChecklistView({ mode }: ChecklistViewProps) {
         statsLeft={`${st.checked} из ${st.total} критериев`}
         statsRight={
           <>
-            <Button variant="secondary" size="sm" onClick={() => window.print()}>
+            <Button variant="secondary" size="sm" onClick={() => exportChecklistPDF(mode, cur)}>
               <Download size={12} />PDF
             </Button>
             <Button variant="secondary" size="sm" onClick={() => reset(mode)}>Сбросить</Button>
