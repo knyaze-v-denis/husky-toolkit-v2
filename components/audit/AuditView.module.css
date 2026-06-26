@@ -447,7 +447,7 @@
 /* Shared page heading row (list with items, form, report) */
 .pageRow {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
   padding: 4px 0;
