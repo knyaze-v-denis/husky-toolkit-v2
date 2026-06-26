@@ -223,8 +223,7 @@ export function AuditListView() {
       <PageHeader
         title="ИИ-аудит задачи"
         disclaimer={{ text: DISCLAIMER, variant: 'info' }}
-        sticky={false}
-      />
+             />
       <div className={styles.wrap}>
         {hook.history.length === 0 ? (
           <div className={styles.emptyState}>
@@ -300,8 +299,7 @@ export function AuditFormView() {
         title="ИИ-аудит задачи"
         disclaimer={{ text: DISCLAIMER, variant: 'info' }}
         banner={!loading && hook.error ? { text: hook.error, variant: 'bad' } : null}
-        sticky={false}
-      />
+             />
       <div className={styles.wrap}>
         <div className={styles.pageRow}>
           <Button variant="ghost" iconOnly onClick={() => router.push('/audit')} title="К списку">
