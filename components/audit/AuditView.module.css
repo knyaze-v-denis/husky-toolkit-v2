@@ -71,25 +71,50 @@
   gap: 6px;
 }
 
-.usRow {
+.usField {
   display: flex;
   align-items: center;
-  gap: 8px;
+  border: 0.5px solid #d8d8d8;
+  border-radius: 8px;
+  background: #fafafa;
+  transition: border-color 0.12s, background 0.12s;
+  overflow: hidden;
 }
 
-.usRow .input {
-  flex: 1;
-  min-width: 0;
-  width: auto;
+.usField:focus-within {
+  border-color: var(--primary);
+  background: #fff;
 }
 
 .usPrefix {
   font-size: 12px;
   font-weight: 500;
   color: var(--primary);
-  width: 52px;
+  padding: 9px 8px 9px 12px;
+  white-space: nowrap;
   flex-shrink: 0;
-  text-align: right;
+  user-select: none;
+}
+
+.usInput {
+  flex: 1;
+  min-width: 0;
+  font-family: inherit;
+  font-size: 13px;
+  color: #1a1a1a;
+  padding: 9px 12px 9px 4px;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.usInput::placeholder {
+  color: #bbb;
+}
+
+.usInput:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* ── Instruction block ─────────────────────────────────────────── */
@@ -410,6 +435,42 @@
   font-weight: 700;
   flex-shrink: 0;
   margin-top: 1px;
+}
+
+/* Back button — fixed ghost icon, left of content area */
+.backBtn {
+  position: fixed;
+  left: calc(220px + 16px);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+  color: #bbb;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, color 0.12s;
+}
+
+.backBtn:hover {
+  background: rgba(0,0,0,0.06);
+  color: #444;
+}
+
+@media (max-width: 1080px) {
+  .backBtn { display: none; }
+}
+
+/* Form actions row */
+.formActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 /* Button in purple header row */

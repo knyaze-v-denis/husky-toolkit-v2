@@ -141,10 +141,15 @@ export function useAudit() {
     setError(null);
   }, []);
 
+  const injectResult = useCallback((r: AuditResult) => {
+    setResult(r);
+    setError(null);
+  }, []);
+
   return {
     form, updateForm,
     result, loading, error,
     history,
-    runAudit, openEntry, deleteEntry, resetAudit,
+    runAudit, openEntry, deleteEntry, resetAudit, injectResult,
   };
 }
