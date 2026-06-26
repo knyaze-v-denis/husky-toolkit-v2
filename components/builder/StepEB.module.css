@@ -23,10 +23,7 @@
 }
 
 .block {
-  background: #fff;
-  border: 0.5px solid #e0e0e0;
-  border-radius: 12px;
-  overflow: hidden;
+  composes: block from '../ui/Block.module.css';
 }
 
 .blockHead {
@@ -79,7 +76,7 @@
 }
 
 .radio.radioActive {
-  border: 5px solid var(--active-color, #3C3489);
+  border: 5px solid var(--active-color, var(--primary));
 }
 
 .checkbox {
@@ -96,8 +93,8 @@
 }
 
 .checkbox.checkboxActive {
-  background: var(--active-color, #3C3489);
-  border-color: var(--active-color, #3C3489);
+  background: var(--active-color, var(--primary));
+  border-color: var(--active-color, var(--primary));
 }
 
 .optText {

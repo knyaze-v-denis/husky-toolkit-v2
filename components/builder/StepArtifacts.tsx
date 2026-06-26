@@ -1,27 +1,16 @@
 'use client';
 
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { BUILDS, type BuildType, type ArtStatus } from '@/lib/data/builder';
+import { BUILDS, STATUS_LABEL, STATUS_CLASS, type BuildType } from '@/lib/data/builder';
 import { Button } from '@/components/ui/Button';
 import styles from './StepArtifacts.module.css';
+import artStyles from '@/components/ui/ArtStatus.module.css';
 
 interface StepArtifactsProps {
   build: BuildType;
   onNext: () => void;
   onBack: () => void;
 }
-
-const STATUS_LABEL: Record<ArtStatus, string> = {
-  req: 'Обязательно',
-  opt: 'Опционально',
-  no:  'Не нужно',
-};
-
-const STATUS_CLASS: Record<ArtStatus, string> = {
-  req: 'req',
-  opt: 'opt',
-  no:  'no',
-};
 
 export function StepArtifacts({ build, onNext, onBack }: StepArtifactsProps) {
   const b = BUILDS[build];
@@ -33,8 +22,10 @@ export function StepArtifacts({ build, onNext, onBack }: StepArtifactsProps) {
       {/* Карточка билда */}
       <div className={styles.buildCard} style={{ background: b.color }}>
         <div className={styles.buildLabel} style={{ color: b.tc }}>Билд проектирования</div>
-        <div className={styles.buildName} style={{ color: b.tc }}>{b.name}</div>
-        <div className={styles.buildType} style={{ color: b.tc }}>{b.type}</div>
+        <div className={styles.buildNameRow}>
+          <span className={styles.buildName} style={{ color: b.tc }}>{b.name}</span>
+          <span className={styles.buildTypeBadge} style={{ color: b.tc }}>{b.type}</span>
+        </div>
         <div className={styles.buildDesc} style={{ color: b.tc }}>{b.desc}</div>
       </div>
 
@@ -46,7 +37,7 @@ export function StepArtifacts({ build, onNext, onBack }: StepArtifactsProps) {
             {reqArts.map((art, i) => (
               <div key={i} className={styles.artRow}>
                 <span className={styles.artName}>{art.n}</span>
-                <span className={`${styles.artStatus} ${styles[STATUS_CLASS[art.s]]}`}>
+                <span className={`${artStyles.artStatus} ${artStyles[STATUS_CLASS[art.s]]}`}>
                   {STATUS_LABEL[art.s]}
                 </span>
               </div>
@@ -63,7 +54,7 @@ export function StepArtifacts({ build, onNext, onBack }: StepArtifactsProps) {
             {optArts.map((art, i) => (
               <div key={i} className={`${styles.artRow} ${art.s === 'no' ? styles.muted : ''}`}>
                 <span className={styles.artName}>{art.n}</span>
-                <span className={`${styles.artStatus} ${styles[STATUS_CLASS[art.s]]}`}>
+                <span className={`${artStyles.artStatus} ${artStyles[STATUS_CLASS[art.s]]}`}>
                   {STATUS_LABEL[art.s]}
                 </span>
               </div>

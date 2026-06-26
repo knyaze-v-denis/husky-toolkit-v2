@@ -24,7 +24,7 @@
 }
 
 .item.active {
-  color: #3C3489;
+  color: var(--primary);
   font-weight: 600;
 }
 
@@ -48,8 +48,8 @@
 }
 
 .active .dot {
-  border-color: #3C3489;
-  background: #3C3489;
+  border-color: var(--primary);
+  background: var(--primary);
   color: white;
 }
 

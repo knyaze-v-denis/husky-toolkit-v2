@@ -83,7 +83,7 @@
 
 .navItem.active {
   background: #EEEDFE;
-  color: #3C3489;
+  color: var(--primary);
 }
 
 .navIcon {

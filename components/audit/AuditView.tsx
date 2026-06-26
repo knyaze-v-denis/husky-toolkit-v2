@@ -2,6 +2,7 @@
 
 import { useAudit, type AuditResult, type AuditEntry } from '@/lib/hooks/useAudit';
 import { PageHeader } from '@/components/builder/PageHeader';
+import { Button } from '@/components/ui/Button';
 import styles from './AuditView.module.css';
 
 const STATUS_ICON = {
@@ -161,7 +162,7 @@ export function AuditView() {
         statsLeft={statsLeft}
         statsRight={
           result ? (
-            <button className={styles.resetBtnSm} onClick={resetAudit}>Новый аудит</button>
+            <Button variant="secondary" size="sm" onClick={resetAudit}>Новый аудит</Button>
           ) : undefined
         }
       />
@@ -207,13 +208,9 @@ export function AuditView() {
               onChange={e => updateForm({ desc: e.target.value })}
             />
           </div>
-          <button
-            className={styles.runBtn}
-            onClick={runAudit}
-            disabled={loading}
-          >
+          <Button variant="primary" onClick={runAudit} disabled={loading}>
             {loading ? 'Анализируем…' : 'Запустить аудит'}
-          </button>
+          </Button>
         </div>
 
         {/* Результат */}

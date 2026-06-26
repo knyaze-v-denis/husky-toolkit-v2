@@ -3,6 +3,7 @@
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { EB_COMPLEXITY, EB_NOVELTY, RISK_GROUPS, BUILDS, type BuildType } from '@/lib/data/builder';
 import { Button } from '@/components/ui/Button';
+import { hexToRgba } from '@/lib/utils';
 import styles from './StepEB.module.css';
 
 interface StepEBProps {
@@ -16,12 +17,6 @@ interface StepEBProps {
   onBack: () => void;
 }
 
-function hexToRgba(hex: string, alpha: number): string {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return `rgba(${r},${g},${b},${alpha})`;
-}
 
 export function StepEB({
   build, complexity, novelty, risks,
@@ -106,11 +101,11 @@ export function StepEB({
       </div>
 
       {/* Риски */}
-      <div className={styles.block} style={{ '--active-bg': hexToRgba('#FAEEDA', 0.35), '--active-color': '#633806' } as React.CSSProperties}>
+      <div className={styles.block} style={{ '--active-bg': hexToRgba('#FAEEDA', 0.3), '--active-color': '#633806' } as React.CSSProperties}>
         <div className={styles.blockHead} style={{ background: '#FAEEDA', color: '#633806' }}>
           <span>Риски</span>
         </div>
-        {RISK_GROUPS.map((group, gi) => {
+        {RISK_GROUPS.map((group) => {
           const sel = risks[group.label] ?? [];
           return (
             <div key={group.label}>
@@ -121,15 +116,19 @@ export function StepEB({
                   <div
                     key={item.v}
                     className={`${styles.optRow} ${active ? styles.optActive : ''}`}
-                    onClick={() => onRisk(group.label, item.v, item.none)}
+                    onClick={() => onRisk(group.label, item.v, group.radio ? true : item.none)}
                   >
-                    <div className={`${styles.checkbox} ${active ? styles.checkboxActive : ''}`}>
-                      {active && (
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                          <path d="M2 5l2.5 2.5L8 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      )}
-                    </div>
+                    {group.radio ? (
+                      <div className={`${styles.radio} ${active ? styles.radioActive : ''}`} />
+                    ) : (
+                      <div className={`${styles.checkbox} ${active ? styles.checkboxActive : ''}`}>
+                        {active && (
+                          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                            <path d="M2 5l2.5 2.5L8 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        )}
+                      </div>
+                    )}
                     <div className={styles.optText}>
                       <div className={styles.optLabel}>{item.l}</div>
                       {item.sub && <div className={styles.optSub}>{item.sub}</div>}

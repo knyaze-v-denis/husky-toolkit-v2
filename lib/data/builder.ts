@@ -55,6 +55,7 @@ export interface RiskItem {
 
 export interface RiskGroup {
   label: string;
+  radio?: boolean;
   items: RiskItem[];
 }
 
@@ -231,6 +232,7 @@ export const EB_NOVELTY: EBFactor = {
 export const RISK_GROUPS: RiskGroup[] = [
   {
     label: 'Исследование',
+    radio: true,
     items: [
       { v: 'res0', l: 'Исследование не требуется или достаточно любых респондентов', sub: null,                                                     p: 0, none: true  },
       { v: 'res1', l: 'Требуются респонденты из целевой аудитории',                  sub: 'Рекрутинг специфической аудитории может затянуть сроки', p: 3, none: false },
@@ -254,6 +256,21 @@ export const RISK_GROUPS: RiskGroup[] = [
     ],
   },
 ];
+
+
+// ─── КОНСТАНТЫ АРТЕФАКТОВ ────────────────────────────────────────
+
+export const STATUS_LABEL: Record<ArtStatus, string> = {
+  req: 'Обязательно',
+  opt: 'Опционально',
+  no:  'Не нужно',
+};
+
+export const STATUS_CLASS: Record<ArtStatus, string> = {
+  req: 'req',
+  opt: 'opt',
+  no:  'no',
+};
 
 
 // ─── УТИЛИТЫ ─────────────────────────────────────────────────────

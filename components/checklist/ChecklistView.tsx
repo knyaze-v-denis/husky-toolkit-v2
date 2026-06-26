@@ -3,14 +3,9 @@
 import { CHECKLISTS, type ChecklistMode } from '@/lib/data/checklists';
 import { useChecklist } from '@/lib/hooks/useChecklist';
 import { PageHeader } from '@/components/builder/PageHeader';
+import { Button } from '@/components/ui/Button';
+import { hexToRgba } from '@/lib/utils';
 import styles from './ChecklistView.module.css';
-
-function hexToRgba(hex: string, alpha: number): string {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return `rgba(${r},${g},${b},${alpha})`;
-}
 
 interface ChecklistViewProps {
   mode: ChecklistMode;
@@ -43,9 +38,7 @@ export function ChecklistView({ mode }: ChecklistViewProps) {
         progress={st.pct}
         statsLeft={`${st.pct}% · ${st.checked} из ${st.total} отмечено`}
         statsRight={
-          <button className={styles.resetBtn} onClick={() => reset(mode)}>
-            Сбросить
-          </button>
+          <Button variant="secondary" size="sm" onClick={() => reset(mode)}>Сбросить</Button>
         }
       />
 

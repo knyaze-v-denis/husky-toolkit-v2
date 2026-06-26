@@ -23,14 +23,20 @@
   width: 100%;
 }
 
+.sm {
+  padding: 4px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
 /* Variants */
 .primary {
-  background: #3C3489;
+  background: var(--primary);
   color: white;
 }
 
 .primary:hover:not(:disabled) {
-  background: #534AB7;
+  background: var(--primary-hover);
 }
 
 .secondary {

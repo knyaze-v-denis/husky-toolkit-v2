@@ -6,7 +6,7 @@
   line-height: 1.5;
 }
 
-.info { background: #EEEDFE; color: #3C3489; }
+.info { background: #EEEDFE; color: var(--primary); }
 .ok   { background: #EAF3DE; color: #27500A; }
 .warn { background: #FAEEDA; color: #633806; }
 .bad  { background: #FCEBEB; color: #791F1F; }

@@ -1,5 +1,5 @@
 .wrap {
-  background: #f7f7f5;
+  background: var(--bg);
   padding-bottom: 10px;
   display: flex;
   flex-direction: column;
@@ -14,7 +14,7 @@
 }
 
 .hdr {
-  background: #3C3489;
+  background: var(--primary);
   border-radius: 12px;
   padding: 14px 20px;
   display: flex;
@@ -49,7 +49,7 @@
 .progressFill {
   height: 4px;
   border-radius: 2px;
-  background: #534AB7;
+  background: var(--primary-hover);
   transition: width .3s;
 }
 

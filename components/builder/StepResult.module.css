@@ -18,17 +18,26 @@
   margin-bottom: 4px;
 }
 
+.buildNameRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
 .buildName {
   font-size: 22px;
   font-weight: 700;
-  margin-bottom: 2px;
 }
 
-.buildType {
-  font-size: 12px;
+.buildTypeBadge {
+  font-size: 11px;
   font-weight: 500;
-  opacity: 0.7;
-  margin-bottom: 6px;
+  padding: 2px 9px;
+  border-radius: 20px;
+  background: rgba(0,0,0,0.1);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .buildRange {
@@ -59,8 +68,9 @@
 }
 
 .ebTime {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.5;
+  opacity: 0.8;
 }
 
 .ebRange {
@@ -69,10 +79,7 @@
 }
 
 .block {
-  background: #fff;
-  border: 0.5px solid #e0e0e0;
-  border-radius: 12px;
-  overflow: hidden;
+  composes: block from '../ui/Block.module.css';
 }
 
 .blockTitle {
@@ -114,7 +121,7 @@
 
 .total .pts {
   font-size: 15px;
-  color: #3C3489;
+  color: var(--primary);
 }
 
 /* Артефакты */
@@ -138,30 +145,6 @@
 
 .artName {
   color: #1a1a1a;
-}
-
-.artStatus {
-  font-size: 11px;
-  font-weight: 500;
-  padding: 3px 8px;
-  border-radius: 6px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.artStatus.req {
-  background: #E1F5EE;
-  color: #085041;
-}
-
-.artStatus.opt {
-  background: #EEEDFE;
-  color: #3C3489;
-}
-
-.artStatus.no {
-  background: #f0f0f0;
-  color: #999;
 }
 
 .footer {

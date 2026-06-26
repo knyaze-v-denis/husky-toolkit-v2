@@ -2,8 +2,9 @@
 
 import { ArrowLeft, Download, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import { BUILDS, EB_COMPLEXITY, EB_NOVELTY, RISK_GROUPS, fmtScore, type BuildType, type ArtStatus } from '@/lib/data/builder';
+import { BUILDS, EB_COMPLEXITY, EB_NOVELTY, RISK_GROUPS, fmtScore, STATUS_LABEL, STATUS_CLASS, type BuildType } from '@/lib/data/builder';
 import styles from './StepResult.module.css';
+import artStyles from '@/components/ui/ArtStatus.module.css';
 
 interface StepResultProps {
   build: BuildType;
@@ -16,18 +17,6 @@ interface StepResultProps {
   onBack: () => void;
   onReset: () => void;
 }
-
-const STATUS_LABEL: Record<ArtStatus, string> = {
-  req: 'Обязательно',
-  opt: 'Опционально',
-  no:  'Не нужно',
-};
-
-const STATUS_CLASS: Record<ArtStatus, string> = {
-  req: 'req',
-  opt: 'opt',
-  no:  'no',
-};
 
 export function StepResult({
   build, qScore, ebScore, complexity, novelty, risks,
@@ -54,8 +43,10 @@ export function StepResult({
       {/* Билд */}
       <div className={styles.buildCard} style={{ background: b.color }}>
         <div className={styles.buildLabel} style={{ color: b.tc }}>Билд проектирования</div>
-        <div className={styles.buildName} style={{ color: b.tc }}>{b.name}</div>
-        <div className={styles.buildType} style={{ color: b.tc }}>{b.type}</div>
+        <div className={styles.buildNameRow}>
+          <span className={styles.buildName} style={{ color: b.tc }}>{b.name}</span>
+          <span className={styles.buildTypeBadge} style={{ color: b.tc }}>{b.type}</span>
+        </div>
         <div className={styles.buildRange} style={{ color: b.tc }}>{b.desc}</div>
       </div>
 
@@ -120,7 +111,7 @@ export function StepResult({
           {reqArts.map((art, i) => (
             <div key={i} className={styles.artRow}>
               <span className={styles.artName}>{art.n}</span>
-              <span className={`${styles.artStatus} ${styles[STATUS_CLASS[art.s]]}`}>
+              <span className={`${artStyles.artStatus} ${artStyles[STATUS_CLASS[art.s]]}`}>
                 {STATUS_LABEL[art.s]}
               </span>
             </div>
@@ -133,7 +124,7 @@ export function StepResult({
           {optArts.map((art, i) => (
             <div key={i} className={`${styles.artRow} ${art.s === 'no' ? styles.artMuted : ''}`}>
               <span className={styles.artName}>{art.n}</span>
-              <span className={`${styles.artStatus} ${styles[STATUS_CLASS[art.s]]}`}>
+              <span className={`${artStyles.artStatus} ${artStyles[STATUS_CLASS[art.s]]}`}>
                 {STATUS_LABEL[art.s]}
               </span>
             </div>
