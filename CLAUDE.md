@@ -190,3 +190,24 @@ ebTime (13px, opacity 0.8) — "до 1 недели"
 **Кнопки в шапках аудита:** `size="sm"` (28px); кнопка «← К списку» в отчёте — иконка+текст, не `iconOnly`
 
 **Модель в DISCLAIMER:** Claude Haiku 4.5
+
+### 2026-06-26 — PDF-экспорт во всех модулях
+
+**Архитектура:**
+- `lib/pdf/render.ts` — единое ядро: html2canvas scale:2, умные переносы страниц, срезка canvas
+- `lib/pdf/branding.ts` — `pdfHeader()` (лого Husky + «SimpleOne» + дата), `pdfFooter(ai?)`, `pdfWrap()`, `sectionLabel()`
+- `lib/pdf/auditPdf.ts`, `builderPdf.ts`, `checklistPdf.ts` — генераторы HTML для каждого модуля
+
+**Переносы страниц:**
+- Элементы с `[data-nocut]` не разрезаются: если точка разреза попадает внутрь элемента, она сдвигается к `element.top`
+- Измерение позиций через `getBoundingClientRect()` — до рендера canvas, после `await raf()` (два кадра для завершения layout)
+- Каждая страница = отдельный срез canvas (`drawImage` с нужным `sy/sh`), размещается с `dstY` — не сдвиг всего изображения
+- Отступ сверху: страница 1 — из `pdfWrap padding: 2rem` (~10mm), страницы 2+ — `MARGIN = 10mm`
+
+**Брендинг:**
+- Логотип — SVG из `Sidebar.tsx`, атрибуты переведены в HTML (`stopColor` → `stop-color`), уникальный id `htpdfg`
+- Оговорка «Сгенерировано ИИ» — только в аудите (`pdfFooter(true)`), в билдере и чек-листах её нет
+
+**Подключение:**
+- `window.print()` заменён на `exportBuilderPDF()` в `StepResult.tsx` и `exportChecklistPDF()` в `ChecklistView.tsx`
+- В аудите кнопка PDF уже вызывала `exportAuditPDF()` (был базовый вариант, теперь на общем рендере)
