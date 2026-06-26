@@ -294,13 +294,13 @@ export function AuditFormView() {
   };
 
   const formBelow = (
-    <div className={styles.pageRow}>
-      <div className={styles.backBtnWrap}>
+    <div className={styles.titleCard}>
+      <div className={styles.pageRow}>
         <Button variant="ghost" iconOnly size="sm" onClick={() => router.push('/audit')} title="К списку">
           <ArrowLeft size={14} />
         </Button>
+        <span className={styles.pageTitle}>Новый аудит</span>
       </div>
-      <span className={styles.pageTitle}>Новый аудит</span>
     </div>
   );
 
@@ -398,29 +398,29 @@ export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; 
   }
 
   const reportBelow = (
-    <div className={styles.pageRow}>
-      <div className={styles.backBtnWrap}>
+    <div className={styles.titleCard}>
+      <div className={styles.pageRow}>
         <Button variant="ghost" iconOnly size="sm" onClick={() => router.push('/audit')} title="К списку">
           <ArrowLeft size={14} />
         </Button>
-      </div>
-      <div className={styles.reportTitleCol}>
-        <span className={styles.pageTitle}>{entry.title}</span>
-        {entry.link && (
-          <a href={entry.link} target="_blank" rel="noreferrer" className={styles.reportLink}>
-            {entry.link}
-          </a>
-        )}
-      </div>
-      <div className={styles.pageActions}>
-        <Button variant="secondary" size="sm" onClick={() => window.print()}>
-          <Download size={12} />PDF
-        </Button>
-        {isFresh && (
-          <Button variant="secondary" size="sm" onClick={() => { hook.resetAudit(); router.push('/audit/new'); }}>
-            Новый аудит
+        <div className={styles.reportTitleCol}>
+          <span className={styles.pageTitle}>{entry.title}</span>
+          {entry.link && (
+            <a href={entry.link} target="_blank" rel="noreferrer" className={styles.reportLink}>
+              {entry.link}
+            </a>
+          )}
+        </div>
+        <div className={styles.pageActions}>
+          <Button variant="secondary" size="sm" onClick={() => window.print()}>
+            <Download size={12} />PDF
           </Button>
-        )}
+          {isFresh && (
+            <Button variant="secondary" size="sm" onClick={() => { hook.resetAudit(); router.push('/audit/new'); }}>
+              Новый аудит
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
