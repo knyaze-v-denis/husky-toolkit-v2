@@ -302,8 +302,8 @@ export function AuditFormView() {
              />
       <div className={styles.wrap}>
         <div className={styles.pageRow}>
-          <Button variant="ghost" iconOnly onClick={() => router.push('/audit')} title="К списку">
-            <ArrowLeft size={16} />
+          <Button variant="ghost" iconOnly size="sm" onClick={() => router.push('/audit')} title="К списку">
+            <ArrowLeft size={14} />
           </Button>
           <span className={styles.pageTitle}>Новый аудит</span>
         </div>
@@ -381,7 +381,7 @@ export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; 
   if (!entry) {
     return (
       <div>
-        <PageHeader title="ИИ-аудит задачи" disclaimer={{ text: DISCLAIMER, variant: 'info' }} sticky={false} />
+        <PageHeader title="ИИ-аудит задачи" disclaimer={{ text: DISCLAIMER, variant: 'info' }} />
         <div className={styles.wrap}>
           <div className={styles.emptyState}>
             <div className={styles.emptyTitle}>Аудит не найден</div>
@@ -394,11 +394,11 @@ export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; 
 
   return (
     <div>
-      <PageHeader title="ИИ-аудит задачи" disclaimer={{ text: DISCLAIMER, variant: 'info' }} sticky={false} />
+      <PageHeader title="ИИ-аудит задачи" disclaimer={{ text: DISCLAIMER, variant: 'info' }} />
       <div className={styles.wrap}>
         <div className={styles.pageRow}>
-          <Button variant="ghost" iconOnly onClick={() => router.push('/audit')} title="К списку">
-            <ArrowLeft size={16} />
+          <Button variant="ghost" iconOnly size="sm" onClick={() => router.push('/audit')} title="К списку">
+            <ArrowLeft size={14} />
           </Button>
           <div className={styles.reportTitleCol}>
             <span className={styles.pageTitle}>{entry.title}</span>
@@ -409,11 +409,11 @@ export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; 
             )}
           </div>
           <div className={styles.pageActions}>
-            <Button variant="secondary" onClick={() => window.print()}>
-              <Download size={13} />PDF
+            <Button variant="secondary" size="sm" onClick={() => window.print()}>
+              <Download size={12} />PDF
             </Button>
             {isFresh && (
-              <Button variant="secondary" onClick={() => { hook.resetAudit(); router.push('/audit/new'); }}>
+              <Button variant="secondary" size="sm" onClick={() => { hook.resetAudit(); router.push('/audit/new'); }}>
                 Новый аудит
               </Button>
             )}
