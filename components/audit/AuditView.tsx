@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { CheckSquare, FileText, Info, ArrowRight, ScanSearch, Clock, ArrowLeft, Trash2, Download } from 'lucide-react';
+import { exportAuditPDF } from '@/lib/pdf/auditPdf';
 import { useAudit, type AuditResult, type AuditEntry, type AuditForm } from '@/lib/hooks/useAudit';
 import { PageHeader } from '@/components/builder/PageHeader';
 import { Button } from '@/components/ui/Button';
@@ -404,7 +405,7 @@ export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; 
           <ArrowLeft size={14} />К списку
         </Button>
         <div className={styles.pageActions}>
-          <Button variant="secondary" size="sm" onClick={() => window.print()}>
+          <Button variant="secondary" size="sm" onClick={() => exportAuditPDF(entry)}>
             <Download size={12} />PDF
           </Button>
           {isFresh && (
