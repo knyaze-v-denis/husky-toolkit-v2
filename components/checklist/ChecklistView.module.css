@@ -1,7 +1,5 @@
-.info {
-  font-size: 13px;
-  color: #888;
-  margin-bottom: 12px;
+.list {
+  margin-top: 12px;
 }
 
 .block {
@@ -65,6 +63,8 @@
   font-size: 13px;
   color: #1a1a1a;
   line-height: 1.4;
+  position: relative;
+  display: inline;
 }
 
 .itemHint {
@@ -74,15 +74,13 @@
   line-height: 1.4;
 }
 
-.req {
-  color: #c4621a;
-  margin-right: 4px;
-  font-size: 11px;
+.reqDot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #e53e3e;
+  margin-left: 4px;
+  vertical-align: super;
+  flex-shrink: 0;
 }
-
-.footnote {
-  font-size: 12px;
-  color: #aaa;
-  padding-top: 4px;
-}
-

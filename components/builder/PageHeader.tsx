@@ -4,6 +4,7 @@ import styles from './PageHeader.module.css';
 interface PageHeaderProps {
   title: string;
   badge?: string;
+  disclaimer?: { text: string; variant: 'info' | 'ok' | 'warn' | 'bad' };
   banner?: { text: string; variant: 'info' | 'ok' | 'warn' | 'bad' } | null;
   progress?: number; // undefined = скрыть прогресс-бар
   statsLeft?: string;
@@ -12,7 +13,7 @@ interface PageHeaderProps {
 }
 
 export function PageHeader({
-  title, badge, banner, progress, statsLeft, statsRight, sticky = true,
+  title, badge, disclaimer, banner, progress, statsLeft, statsRight, sticky = true,
 }: PageHeaderProps) {
   return (
     <div className={`${styles.wrap} ${sticky ? styles.sticky : ''}`}>
@@ -20,6 +21,7 @@ export function PageHeader({
         <span className={styles.title}>{title}</span>
         {badge && <span className={styles.badge}>{badge}</span>}
       </div>
+      {disclaimer && <Banner variant={disclaimer.variant}>{disclaimer.text}</Banner>}
       {banner && <Banner variant={banner.variant}>{banner.text}</Banner>}
       {progress !== undefined && (
         <div className={styles.progressBar}>
