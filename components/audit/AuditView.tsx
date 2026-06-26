@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { CheckSquare, FileText, Info, ArrowRight, ScanSearch, Clock, ArrowLeft, Trash2, Download } from 'lucide-react';
+import { CheckSquare, FileText, Info, ArrowRight, ScanSearch, Clock, ArrowLeft, Trash2, Download, ChevronDown, BookOpen, Check, AlertTriangle, X, AlertCircle, HelpCircle } from 'lucide-react';
 import { exportAuditPDF } from '@/lib/pdf/auditPdf';
 import { useAudit, type AuditResult, type AuditEntry, type AuditForm } from '@/lib/hooks/useAudit';
 import { PageHeader } from '@/components/builder/PageHeader';
@@ -78,7 +78,11 @@ function scoreColors(score: number) {
   return { bg: '#FAECE7', tc: '#4A1B0C' };
 }
 
-const STATUS_ICON = { ok: '✓', warn: '!', fail: '✕' };
+const STATUS_ICON = {
+  ok:   <Check size={13} />,
+  warn: <AlertTriangle size={12} />,
+  fail: <X size={13} />,
+};
 
 // ─── RESULT COMPONENTS ───────────────────────────────────────────
 
@@ -112,7 +116,7 @@ function SectionBlock({ section }: { section: AuditResult['sections'][0] }) {
         const ic = colorMap[item.status];
         return (
           <div key={i} className={styles.sectionItem}>
-            <span className={styles.itemIcon} style={{ background: ic.bg, color: ic.tc }}>
+            <span className={styles.itemIcon} style={{ color: ic.tc }}>
               {STATUS_ICON[item.status]}
             </span>
             <span className={styles.itemText}>{item.text}</span>
@@ -133,7 +137,7 @@ function ResultBody({ result }: { result: AuditResult }) {
         <div className={styles.block}>
           <div className={styles.blockHead} style={{ background: '#FAECE7', color: '#4A1B0C' }}>Проблемы</div>
           {result.issues.map((t, i) => (
-            <div key={i} className={styles.listItem}><span className={styles.bullet}>·</span>{t}</div>
+            <div key={i} className={styles.listItem}><span className={styles.bullet} style={{ color: '#993C1D' }}><AlertCircle size={14} /></span>{t}</div>
           ))}
         </div>
       )}
@@ -141,7 +145,7 @@ function ResultBody({ result }: { result: AuditResult }) {
         <div className={styles.block}>
           <div className={styles.blockHead} style={{ background: '#E1F5EE', color: '#085041' }}>Рекомендации</div>
           {result.recommendations.map((t, i) => (
-            <div key={i} className={styles.listItem}><span className={styles.bullet}>·</span>{t}</div>
+            <div key={i} className={styles.listItem}><span className={styles.bullet} style={{ color: '#1D9E75' }}><ArrowRight size={14} /></span>{t}</div>
           ))}
         </div>
       )}
@@ -149,7 +153,7 @@ function ResultBody({ result }: { result: AuditResult }) {
         <div className={styles.block}>
           <div className={styles.blockHead} style={{ background: '#E6F1FB', color: '#0C447C' }}>Вопросы аналитику</div>
           {result.questions.map((t, i) => (
-            <div key={i} className={styles.listItem}><span className={styles.bullet}>?</span>{t}</div>
+            <div key={i} className={styles.listItem}><span className={styles.bullet} style={{ color: '#2F7EC7' }}><HelpCircle size={14} /></span>{t}</div>
           ))}
         </div>
       )}
@@ -159,43 +163,60 @@ function ResultBody({ result }: { result: AuditResult }) {
 
 // ─── INSTRUCTION BLOCK ───────────────────────────────────────────
 
-function InstructionBlock() {
+function InstructionBlock({ open, onToggle }: { open: boolean; onToggle: () => void }) {
   return (
     <div className={styles.block}>
-      <div className={styles.instrHead}>Как пользоваться</div>
-      <div className={styles.instrBody}>
-        <div className={styles.instrItem}>
-          <span className={styles.instrIcon}><FileText size={14} /></span>
-          <div><strong>User Story</strong> — структура, роль, ценность, критерии принятия</div>
-        </div>
-        <div className={styles.instrItem}>
-          <span className={styles.instrIcon}><CheckSquare size={14} /></span>
-          <div><strong>Use Case</strong> — наблюдения для передачи обратной связи аналитику, не влияет на оценку</div>
-        </div>
-        <div className={styles.instrItem}>
-          <span className={styles.instrIcon}><Info size={14} /></span>
-          <div><strong>Экспертная оценка</strong> — полнота описания с точки зрения UX</div>
-        </div>
-      </div>
-      <div className={styles.instrDivider} />
-      <div className={styles.instrBody}>
-        <div className={styles.instrSubhead}>По итогам аудита вы получите:</div>
-        <div className={styles.instrItem}>
-          <span className={styles.instrArrow}><ArrowRight size={13} /></span>
-          Оценку качества описания от 0 до 100
-        </div>
-        <div className={styles.instrItem}>
-          <span className={styles.instrArrow}><ArrowRight size={13} /></span>
-          Список замечаний и рекомендаций
-        </div>
-        <div className={styles.instrItem}>
-          <span className={styles.instrArrow}><ArrowRight size={13} /></span>
-          Готовые вопросы для аналитика
-        </div>
-      </div>
-      <div className={styles.instrFooter}>
-        Заполните хотя бы одно из полей описания. Чем подробнее — тем точнее анализ.
-      </div>
+      <button className={`${styles.instrHead} ${open ? styles.instrHeadOpen : ''}`} onClick={onToggle}>
+        <span className={styles.instrHeadLabel}><BookOpen size={14} />Как пользоваться</span>
+        <span className={`${styles.instrChevron} ${open ? styles.instrChevronOpen : ''}`}>
+          <ChevronDown size={15} />
+        </span>
+      </button>
+      {open && (
+        <>
+          <div className={styles.instrBody}>
+            <p className={styles.instrDesc}>
+              ИИ-аудит анализирует описание задачи и выявляет пробелы, которые могут осложнить проектирование.
+              Инструмент не заменяет общение с аналитиком, но помогает подготовиться к нему и сформулировать точные вопросы.
+            </p>
+          </div>
+          <div className={styles.instrDivider} />
+          <div className={styles.instrBody}>
+            <div className={styles.instrSubhead}>Что анализируется:</div>
+            <div className={styles.instrItem}>
+              <span className={styles.instrIcon}><FileText size={14} /></span>
+              <div><strong>User Story</strong> — структура, роль, ценность, критерии принятия</div>
+            </div>
+            <div className={styles.instrItem}>
+              <span className={styles.instrIcon}><CheckSquare size={14} /></span>
+              <div><strong>Use Case</strong> — полнота сценариев и альтернативных потоков (не влияет на финальную оценку)</div>
+            </div>
+            <div className={styles.instrItem}>
+              <span className={styles.instrIcon}><Info size={14} /></span>
+              <div><strong>Описание задачи</strong> — контекст, ограничения, пользователи</div>
+            </div>
+          </div>
+          <div className={styles.instrDivider} />
+          <div className={styles.instrBody}>
+            <div className={styles.instrSubhead}>По итогам вы получите:</div>
+            <div className={styles.instrItem}>
+              <span className={styles.instrArrow}><ArrowRight size={13} /></span>
+              Оценку качества описания от 0 до 100
+            </div>
+            <div className={styles.instrItem}>
+              <span className={styles.instrArrow}><ArrowRight size={13} /></span>
+              Список замечаний и рекомендаций
+            </div>
+            <div className={styles.instrItem}>
+              <span className={styles.instrArrow}><ArrowRight size={13} /></span>
+              Готовые вопросы для аналитика
+            </div>
+          </div>
+          <div className={styles.instrFooter}>
+            Заполните хотя бы одно из полей описания. Чем подробнее — тем точнее анализ.
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -277,6 +298,7 @@ export function AuditFormView() {
   const hook = useAudit();
   const router = useRouter();
   const [mockLoading, setMockLoading] = useState(false);
+  const [infoOpen, setInfoOpen] = useState(() => hook.history.length === 0);
 
   const loading = hook.loading || mockLoading;
 
@@ -317,6 +339,8 @@ export function AuditFormView() {
           {loading ? (
             <LoadingBlock />
           ) : (
+            <>
+              <InstructionBlock open={infoOpen} onToggle={() => setInfoOpen(o => !o)} />
             <div className={styles.form}>
               <div className={styles.field}>
                 <label className={styles.label}>
@@ -372,6 +396,7 @@ export function AuditFormView() {
                 )}
               </div>
             </div>
+            </>
           )}
       </div>
     </div>
