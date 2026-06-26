@@ -237,7 +237,7 @@ export function AuditListView() {
             <div className={styles.pageRow}>
               <span className={styles.pageTitle}>Мои аудиты</span>
               <div className={styles.pageActions}>
-                <Button variant="primary" onClick={() => router.push('/audit/new')}>Новый аудит</Button>
+                <Button variant="primary" size="sm" onClick={() => router.push('/audit/new')}>Новый аудит</Button>
               </div>
             </div>
             <div className={styles.listWrap}>
@@ -295,12 +295,12 @@ export function AuditFormView() {
 
   const formBelow = (
     <div className={styles.titleCard}>
-      <div className={styles.pageRow}>
+      <div className={styles.titleCardTop}>
         <Button variant="ghost" iconOnly size="sm" onClick={() => router.push('/audit')} title="К списку">
           <ArrowLeft size={14} />
         </Button>
-        <span className={styles.pageTitle}>Новый аудит</span>
       </div>
+      <span className={styles.pageTitle}>Новый аудит</span>
     </div>
   );
 
@@ -399,18 +399,10 @@ export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; 
 
   const reportBelow = (
     <div className={styles.titleCard}>
-      <div className={styles.pageRow}>
+      <div className={styles.titleCardTop}>
         <Button variant="ghost" iconOnly size="sm" onClick={() => router.push('/audit')} title="К списку">
           <ArrowLeft size={14} />
         </Button>
-        <div className={styles.reportTitleCol}>
-          <span className={styles.pageTitle}>{entry.title}</span>
-          {entry.link && (
-            <a href={entry.link} target="_blank" rel="noreferrer" className={styles.reportLink}>
-              {entry.link}
-            </a>
-          )}
-        </div>
         <div className={styles.pageActions}>
           <Button variant="secondary" size="sm" onClick={() => window.print()}>
             <Download size={12} />PDF
@@ -421,6 +413,14 @@ export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; 
             </Button>
           )}
         </div>
+      </div>
+      <div className={styles.reportTitleCol}>
+        <span className={styles.pageTitle}>{entry.title}</span>
+        {entry.link && (
+          <a href={entry.link} target="_blank" rel="noreferrer" className={styles.reportLink}>
+            {entry.link}
+          </a>
+        )}
       </div>
     </div>
   );

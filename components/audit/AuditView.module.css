@@ -447,15 +447,25 @@
 /* Title card (form, report) */
 .titleCard {
   composes: block from '../ui/Block.module.css';
+  padding: 10px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-/* Shared page heading row */
+.titleCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* List heading row */
 .pageRow {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 12px 14px;
+  padding: 4px 0;
 }
 
 .pageTitle {
