@@ -459,13 +459,21 @@
   justify-content: space-between;
 }
 
+/* Form: back button + title in one row */
+.titleCardRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 /* List heading row */
 .pageRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 4px 0;
+  padding: 4px 0 12px;
+  border-bottom: 0.5px solid #e0e0e0;
 }
 
 .pageTitle {

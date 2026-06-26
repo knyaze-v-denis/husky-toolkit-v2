@@ -237,7 +237,7 @@ export function AuditListView() {
             <div className={styles.pageRow}>
               <span className={styles.pageTitle}>Мои аудиты</span>
               <div className={styles.pageActions}>
-                <Button variant="primary" size="sm" onClick={() => router.push('/audit/new')}>Новый аудит</Button>
+                <Button variant="primary" onClick={() => router.push('/audit/new')}>Новый аудит</Button>
               </div>
             </div>
             <div className={styles.listWrap}>
@@ -295,12 +295,12 @@ export function AuditFormView() {
 
   const formBelow = (
     <div className={styles.titleCard}>
-      <div className={styles.titleCardTop}>
+      <div className={styles.titleCardRow}>
         <Button variant="ghost" iconOnly size="sm" onClick={() => router.push('/audit')} title="К списку">
           <ArrowLeft size={14} />
         </Button>
+        <span className={styles.pageTitle}>Новый аудит</span>
       </div>
-      <span className={styles.pageTitle}>Новый аудит</span>
     </div>
   );
 
@@ -400,8 +400,8 @@ export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; 
   const reportBelow = (
     <div className={styles.titleCard}>
       <div className={styles.titleCardTop}>
-        <Button variant="ghost" iconOnly size="sm" onClick={() => router.push('/audit')} title="К списку">
-          <ArrowLeft size={14} />
+        <Button variant="ghost" size="sm" onClick={() => router.push('/audit')}>
+          <ArrowLeft size={14} />К списку
         </Button>
         <div className={styles.pageActions}>
           <Button variant="secondary" size="sm" onClick={() => window.print()}>
