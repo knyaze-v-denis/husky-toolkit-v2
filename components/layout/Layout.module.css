@@ -78,3 +78,17 @@
     padding: 0.75rem 1rem;
   }
 }
+/* Парящий правый сайдбар */
+.rightSidebar {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 260px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  background: white;
+  border-radius: 14px;
+  border: 0.5px solid #e0e0e0;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+  z-index: 50;
+}

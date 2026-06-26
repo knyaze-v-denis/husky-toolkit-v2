@@ -31,7 +31,9 @@ export interface AuditEntry {
   time: string;
   title: string;
   link: string;
-  us: string;
+  usAs: string;
+  usWant: string;
+  usTo: string;
   desc: string;
   result: AuditResult;
 }
@@ -39,11 +41,13 @@ export interface AuditEntry {
 export interface AuditForm {
   title: string;
   link: string;
-  us: string;
+  usAs: string;
+  usWant: string;
+  usTo: string;
   desc: string;
 }
 
-const EMPTY_FORM: AuditForm = { title: '', link: '', us: '', desc: '' };
+const EMPTY_FORM: AuditForm = { title: '', link: '', usAs: '', usWant: '', usTo: '', desc: '' };
 const MAX_HISTORY = 20;
 
 
@@ -60,14 +64,15 @@ export function useAudit() {
     setForm(prev => ({ ...prev, ...patch }));
   }, []);
 
-  const runAudit = useCallback(async () => {
+  const runAudit = useCallback(async (): Promise<boolean> => {
     if (!form.title.trim()) {
       setError('Укажите название задачи — оно используется в истории аудитов и экспорте.');
-      return;
+      return false;
     }
-    if (form.us.trim().length + form.desc.trim().length < 30) {
+    const us = [form.usAs && `Как ${form.usAs}`, form.usWant && `я хочу ${form.usWant}`, form.usTo && `чтобы ${form.usTo}`].filter(Boolean).join(', ');
+    if (us.trim().length + form.desc.trim().length < 30) {
       setError('Заполните хотя бы одно поле описания — текст слишком короткий для анализа.');
-      return;
+      return false;
     }
 
     setLoading(true);
@@ -78,7 +83,7 @@ export function useAudit() {
       const response = await fetch('/api/audit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ us: form.us, desc: form.desc }),
+        body: JSON.stringify({ us, desc: form.desc }),
       });
 
       const data = await response.json();
@@ -91,33 +96,37 @@ export function useAudit() {
           502: 'Не удалось получить ответ от модели. Попробуйте через несколько секунд.',
         };
         setError(msgs[response.status] ?? data.error ?? 'Что-то пошло не так. Попробуйте ещё раз.');
-        return;
+        return false;
       }
 
       setResult(data);
 
       const entry: AuditEntry = {
-        id:   Date.now(),
-        date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }),
-        time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+        id:    Date.now(),
+        date:  new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }),
+        time:  new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
         title: form.title,
         link:  form.link,
-        us:    form.us,
+        usAs:  form.usAs,
+        usWant: form.usWant,
+        usTo:  form.usTo,
         desc:  form.desc,
         result: data,
       };
 
       setHistory(prev => [entry, ...prev].slice(0, MAX_HISTORY));
+      return true;
 
     } catch {
       setError('Нет соединения с сервером. Проверьте интернет и попробуйте снова.');
+      return false;
     } finally {
       setLoading(false);
     }
   }, [form, setHistory]);
 
   const openEntry = useCallback((entry: AuditEntry) => {
-    setForm({ title: entry.title, link: entry.link, us: entry.us, desc: entry.desc });
+    setForm({ title: entry.title, link: entry.link, usAs: entry.usAs, usWant: entry.usWant, usTo: entry.usTo, desc: entry.desc });
     setResult(entry.result);
     setError(null);
   }, []);

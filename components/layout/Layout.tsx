@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { createContext, useCallback, useContext, useState, ReactNode } from 'react';
 import { Sidebar } from './Sidebar';
 import styles from './Layout.module.css';
 
@@ -16,41 +16,58 @@ const HuskyLogo = () => (
   </svg>
 );
 
+interface RightPanelCtxValue {
+  setRightPanel: (node: ReactNode) => void;
+}
+
+const RightPanelCtx = createContext<RightPanelCtxValue>({ setRightPanel: () => {} });
+export const useRightPanel = () => useContext(RightPanelCtx);
+
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 export function Layout({ children }: LayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [rightPanel, setRightPanelState] = useState<ReactNode>(null);
+  const setRightPanel = useCallback((node: ReactNode) => setRightPanelState(node), []);
 
   return (
-    <div className={styles.layout}>
-      {/* Мобильный topbar */}
-      <div className={styles.mobileTopbar}>
-        <div className={styles.mobileLogo}>
-          <HuskyLogo />
-          <span className={styles.mobileLogoName}>Husky Toolkit</span>
+    <RightPanelCtx.Provider value={{ setRightPanel }}>
+      <div className={styles.layout}>
+        {/* Мобильный topbar */}
+        <div className={styles.mobileTopbar}>
+          <div className={styles.mobileLogo}>
+            <HuskyLogo />
+            <span className={styles.mobileLogoName}>Husky Toolkit</span>
+          </div>
+          <button className={styles.burgerBtn} onClick={() => setMobileOpen(true)} aria-label="Меню">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+          </button>
         </div>
-        <button className={styles.burgerBtn} onClick={() => setMobileOpen(true)} aria-label="Меню">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-        </button>
+
+        {/* Overlay */}
+        <div
+          className={`${styles.overlay} ${mobileOpen ? styles.overlayVisible : ''}`}
+          onClick={() => setMobileOpen(false)}
+        />
+
+        <Sidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
+
+        <main className={styles.main}>
+          <div className={styles.content}>
+            {children}
+          </div>
+        </main>
+
+        {rightPanel && (
+          <aside className={styles.rightSidebar}>
+            {rightPanel}
+          </aside>
+        )}
       </div>
-
-      {/* Overlay */}
-      <div
-        className={`${styles.overlay} ${mobileOpen ? styles.overlayVisible : ''}`}
-        onClick={() => setMobileOpen(false)}
-      />
-
-      <Sidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
-
-      <main className={styles.main}>
-        <div className={styles.content}>
-          {children}
-        </div>
-      </main>
-    </div>
+    </RightPanelCtx.Provider>
   );
 }
