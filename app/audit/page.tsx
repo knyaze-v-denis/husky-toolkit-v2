@@ -1,5 +1,5 @@
-import { AuditView } from '@/components/audit/AuditView';
+import { AuditListView } from '@/components/audit/AuditView';
 
 export default function AuditPage() {
-  return <AuditView />;
+  return <AuditListView />;
 }

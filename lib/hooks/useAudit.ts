@@ -64,15 +64,15 @@ export function useAudit() {
     setForm(prev => ({ ...prev, ...patch }));
   }, []);
 
-  const runAudit = useCallback(async (): Promise<boolean> => {
+  const runAudit = useCallback(async (): Promise<number | null> => {
     if (!form.title.trim()) {
       setError('Укажите название задачи — оно используется в истории аудитов и экспорте.');
-      return false;
+      return null;
     }
     const us = [form.usAs && `Как ${form.usAs}`, form.usWant && `я хочу ${form.usWant}`, form.usTo && `чтобы ${form.usTo}`].filter(Boolean).join(', ');
     if (us.trim().length + form.desc.trim().length < 30) {
       setError('Заполните хотя бы одно поле описания — текст слишком короткий для анализа.');
-      return false;
+      return null;
     }
 
     setLoading(true);
@@ -96,13 +96,14 @@ export function useAudit() {
           502: 'Не удалось получить ответ от модели. Попробуйте через несколько секунд.',
         };
         setError(msgs[response.status] ?? data.error ?? 'Что-то пошло не так. Попробуйте ещё раз.');
-        return false;
+        return null;
       }
 
       setResult(data);
 
+      const id = Date.now();
       const entry: AuditEntry = {
-        id:    Date.now(),
+        id,
         date:  new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }),
         time:  new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
         title: form.title,
@@ -115,11 +116,11 @@ export function useAudit() {
       };
 
       setHistory(prev => [entry, ...prev].slice(0, MAX_HISTORY));
-      return true;
+      return id;
 
     } catch {
       setError('Нет соединения с сервером. Проверьте интернет и попробуйте снова.');
-      return false;
+      return null;
     } finally {
       setLoading(false);
     }
@@ -141,10 +142,25 @@ export function useAudit() {
     setError(null);
   }, []);
 
-  const injectResult = useCallback((r: AuditResult) => {
+  const injectResult = useCallback((r: AuditResult, formData: AuditForm): number => {
+    const id = Date.now();
+    const entry: AuditEntry = {
+      id,
+      date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }),
+      time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+      title: formData.title,
+      link:  formData.link,
+      usAs:  formData.usAs,
+      usWant: formData.usWant,
+      usTo:  formData.usTo,
+      desc:  formData.desc,
+      result: r,
+    };
+    setHistory(prev => [entry, ...prev].slice(0, MAX_HISTORY));
     setResult(r);
     setError(null);
-  }, []);
+    return id;
+  }, [setHistory]);
 
   return {
     form, updateForm,
