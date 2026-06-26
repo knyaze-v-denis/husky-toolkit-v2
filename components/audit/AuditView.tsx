@@ -292,6 +292,22 @@ function FormView({
 }) {
   const banner = error ? { text: error, variant: 'bad' as const } : null;
 
+  if (loading) {
+    return (
+      <>
+        <button className={styles.backBtn} onClick={onBack} title="К списку аудитов">
+          <ArrowLeft size={18} />
+        </button>
+        <div>
+          <PageHeader title="Новый аудит" disclaimer={{ text: DISCLAIMER, variant: 'info' }} />
+          <div className={styles.wrap}>
+            <LoadingBlock />
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <button className={styles.backBtn} onClick={onBack} title="К списку аудитов">
@@ -391,34 +407,30 @@ function ReportView({
   onNewAudit: () => void;
   onBackToList: () => void;
 }) {
-  const banner = {
-    text: `Аудит завершён · ${result.score}%`,
-    variant: result.score >= 70 ? 'ok' as const : result.score >= 40 ? 'warn' as const : 'bad' as const,
-  };
-
   return (
-    <div>
-      <PageHeader
-        title={form.title || 'Результат аудита'}
-        disclaimer={{ text: DISCLAIMER, variant: 'info' }}
-        banner={banner}
-        progress={result.score}
-        statsLeft={`${result.sections.length} разделов проверено`}
-        statsRight={
-          <>
-            {isFresh && (
-              <Button variant="secondary" size="sm" onClick={onNewAudit}>Новый аудит</Button>
-            )}
-            <Button variant="secondary" size="sm" onClick={onBackToList}>
-              <ArrowLeft size={13} />К списку
+    <>
+      <button className={styles.backBtn} onClick={onBackToList} title="К списку аудитов">
+        <ArrowLeft size={18} />
+      </button>
+      <div>
+        <PageHeader
+          title={form.title || 'Результат аудита'}
+          disclaimer={{ text: DISCLAIMER, variant: 'info' }}
+          progress={result.score}
+        />
+        <div className={styles.wrap}>
+          <ResultBody result={result} />
+          <div className={styles.reportActions}>
+            <Button variant="secondary" size="sm" onClick={() => window.print()}>
+              Экспорт PDF
             </Button>
-          </>
-        }
-      />
-      <div className={styles.wrap}>
-        <ResultBody result={result} />
+            {isFresh && (
+              <Button variant="primary" size="sm" onClick={onNewAudit}>Новый аудит</Button>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -453,7 +465,7 @@ export function AuditView() {
   const handleMock = async () => {
     hook.updateForm(MOCK_FORM);
     setMockLoading(true);
-    await new Promise(r => setTimeout(r, 2500));
+    await new Promise(r => setTimeout(r, 10000));
     setMockLoading(false);
     hook.injectResult(MOCK_RESULT);
     setView('report');
