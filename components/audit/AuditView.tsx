@@ -211,17 +211,6 @@ function LoadingBlock() {
   );
 }
 
-// ─── BACK BUTTON (fixed, left gutter) ────────────────────────────
-
-function BackBtn({ onClick }: { onClick: () => void }) {
-  return (
-    <div className={styles.backBtnWrap}>
-      <Button variant="secondary" size="sm" onClick={onClick}>
-        <ArrowLeft size={15} />
-      </Button>
-    </div>
-  );
-}
 
 // ─── LIST VIEW ────────────────────────────────────────────────────
 
@@ -306,19 +295,20 @@ export function AuditFormView() {
   };
 
   return (
-    <>
-      <BackBtn onClick={() => router.back()} />
-      <div>
-        <PageHeader
-          title="ИИ-аудит задачи"
-          disclaimer={{ text: DISCLAIMER, variant: 'info' }}
-          banner={!loading && hook.error ? { text: hook.error, variant: 'bad' } : null}
-          sticky={false}
-        />
-        <div className={styles.wrap}>
-          <div className={styles.pageRow}>
-            <span className={styles.pageTitle}>Новый аудит</span>
-          </div>
+    <div>
+      <PageHeader
+        title="ИИ-аудит задачи"
+        disclaimer={{ text: DISCLAIMER, variant: 'info' }}
+        banner={!loading && hook.error ? { text: hook.error, variant: 'bad' } : null}
+        sticky={false}
+      />
+      <div className={styles.wrap}>
+        <div className={styles.pageRow}>
+          <button className={styles.listCardDelete} onClick={() => router.push('/audit')} title="К списку">
+            <ArrowLeft size={16} />
+          </button>
+          <span className={styles.pageTitle}>Новый аудит</span>
+        </div>
 
           {loading ? (
             <LoadingBlock />
@@ -381,7 +371,6 @@ export function AuditFormView() {
           )}
         </div>
       </div>
-    </>
   );
 }
 
@@ -406,34 +395,34 @@ export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; 
   }
 
   return (
-    <>
-      <BackBtn onClick={() => router.back()} />
-      <div>
-        <PageHeader title="ИИ-аудит задачи" disclaimer={{ text: DISCLAIMER, variant: 'info' }} sticky={false} />
-        <div className={styles.wrap}>
-          <div className={styles.pageRow}>
-            <div className={styles.reportTitleCol}>
-              <span className={styles.pageTitle}>{entry.title}</span>
-              {entry.link && (
-                <a href={entry.link} target="_blank" rel="noreferrer" className={styles.reportLink}>
-                  {entry.link}
-                </a>
-              )}
-            </div>
-            <div className={styles.pageActions}>
-              <Button variant="secondary" onClick={() => window.print()}>
-                <Download size={13} />PDF
-              </Button>
-              {isFresh && (
-                <Button variant="secondary" onClick={() => { hook.resetAudit(); router.push('/audit/new'); }}>
-                  Новый аудит
-                </Button>
-              )}
-            </div>
+    <div>
+      <PageHeader title="ИИ-аудит задачи" disclaimer={{ text: DISCLAIMER, variant: 'info' }} sticky={false} />
+      <div className={styles.wrap}>
+        <div className={styles.pageRow}>
+          <button className={styles.listCardDelete} onClick={() => router.push('/audit')} title="К списку">
+            <ArrowLeft size={16} />
+          </button>
+          <div className={styles.reportTitleCol}>
+            <span className={styles.pageTitle}>{entry.title}</span>
+            {entry.link && (
+              <a href={entry.link} target="_blank" rel="noreferrer" className={styles.reportLink}>
+                {entry.link}
+              </a>
+            )}
           </div>
-          <ResultBody result={entry.result} />
+          <div className={styles.pageActions}>
+            <Button variant="secondary" onClick={() => window.print()}>
+              <Download size={13} />PDF
+            </Button>
+            {isFresh && (
+              <Button variant="secondary" onClick={() => { hook.resetAudit(); router.push('/audit/new'); }}>
+                Новый аудит
+              </Button>
+            )}
+          </div>
         </div>
+        <ResultBody result={entry.result} />
       </div>
-    </>
+    </div>
   );
 }
