@@ -4,10 +4,12 @@ interface ButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
   variant?: 'primary' | 'secondary' | 'ghost';
-  size?: 'md' | 'sm';
+  size?: 'sm' | 'md' | 'lg';
+  iconOnly?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
   type?: 'button' | 'submit';
+  title?: string;
 }
 
 export function Button({
@@ -15,17 +17,22 @@ export function Button({
   onClick,
   variant = 'primary',
   size = 'md',
+  iconOnly = false,
   disabled = false,
   fullWidth = false,
   type = 'button',
+  title,
 }: ButtonProps) {
+  const cls = [
+    styles.btn,
+    styles[variant],
+    styles[size],
+    iconOnly ? styles.iconOnly : '',
+    fullWidth ? styles.fullWidth : '',
+  ].filter(Boolean).join(' ');
+
   return (
-    <button
-      type={type}
-      className={`${styles.btn} ${styles[variant]} ${size === 'sm' ? styles.sm : ''} ${fullWidth ? styles.fullWidth : ''}`}
-      onClick={onClick}
-      disabled={disabled}
-    >
+    <button type={type} className={cls} onClick={onClick} disabled={disabled} title={title}>
       {children}
     </button>
   );

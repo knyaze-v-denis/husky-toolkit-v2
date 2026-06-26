@@ -304,9 +304,9 @@ export function AuditFormView() {
       />
       <div className={styles.wrap}>
         <div className={styles.pageRow}>
-          <button className={styles.listCardDelete} onClick={() => router.push('/audit')} title="К списку">
+          <Button variant="ghost" iconOnly onClick={() => router.push('/audit')} title="К списку">
             <ArrowLeft size={16} />
-          </button>
+          </Button>
           <span className={styles.pageTitle}>Новый аудит</span>
         </div>
 
@@ -399,9 +399,9 @@ export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; 
       <PageHeader title="ИИ-аудит задачи" disclaimer={{ text: DISCLAIMER, variant: 'info' }} sticky={false} />
       <div className={styles.wrap}>
         <div className={styles.pageRow}>
-          <button className={styles.listCardDelete} onClick={() => router.push('/audit')} title="К списку">
+          <Button variant="ghost" iconOnly onClick={() => router.push('/audit')} title="К списку">
             <ArrowLeft size={16} />
-          </button>
+          </Button>
           <div className={styles.reportTitleCol}>
             <span className={styles.pageTitle}>{entry.title}</span>
             {entry.link && (

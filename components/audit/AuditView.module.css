@@ -453,14 +453,10 @@
   padding: 4px 0;
 }
 
-.pageRow .listCardDelete {
-  padding: 11px 8px;
-  margin-top: -1px;
-}
-
 .pageTitle {
   font-size: 20px;
   font-weight: 700;
+  line-height: 36px;
   color: #1a1a1a;
   flex: 1;
   min-width: 0;
