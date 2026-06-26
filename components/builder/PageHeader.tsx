@@ -11,10 +11,11 @@ interface PageHeaderProps {
   statsLeft?: string;
   statsRight?: React.ReactNode;
   sticky?: boolean;
+  below?: React.ReactNode;
 }
 
 export function PageHeader({
-  title, badge, headerRight, disclaimer, banner, progress, statsLeft, statsRight, sticky = true,
+  title, badge, headerRight, disclaimer, banner, progress, statsLeft, statsRight, sticky = true, below,
 }: PageHeaderProps) {
   return (
     <div className={`${styles.wrap} ${sticky ? styles.sticky : ''}`}>
@@ -38,6 +39,7 @@ export function PageHeader({
           {statsRight && <div className={styles.statsRight}>{statsRight}</div>}
         </div>
       )}
+      {below}
     </div>
   );
 }
