@@ -8,7 +8,7 @@ import { PageHeader } from '@/components/builder/PageHeader';
 import { Button } from '@/components/ui/Button';
 import styles from './AuditView.module.css';
 
-const DISCLAIMER = 'Анализ проводит Claude Sonnet 4.6. Модель может совершать ошибки — проверяйте выводы самостоятельно, особенно при принятии важных решений.';
+const DISCLAIMER = 'Анализ проводит Claude Haiku 4.5. Модель может совершать ошибки — проверяйте выводы самостоятельно, особенно при принятии важных решений.';
 
 // ─── MOCK DATA (dev only) ─────────────────────────────────────────
 
