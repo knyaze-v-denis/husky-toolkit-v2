@@ -227,6 +227,17 @@ ebTime (13px, opacity 0.8) — "до 1 недели"
 - `window.print()` заменён на `exportBuilderPDF()` в `StepResult.tsx` и `exportChecklistPDF()` в `ChecklistView.tsx`
 - В аудите кнопка PDF уже вызывала `exportAuditPDF()` (был базовый вариант, теперь на общем рендере)
 
+### 2026-06-27 — Тултип для кнопок, валидация формы аудита
+
+**Тултип:**
+- `Button` (`'use client'`): при наличии `title` — `onMouseEnter`/`onMouseLeave` на `<button>`, рендерит `position: fixed` span (класс `.tip` в `Button.module.css`)
+- `position: fixed` не обрезается никаким `overflow: hidden` родителя
+- Текст с `text-overflow: ellipsis` — нативный `title` (браузерный хинт, без кастомного компонента)
+
+**Валидация формы аудита:**
+- «Описание задачи» помечено как обязательное (красная точка `.reqDot`)
+- `canRun = title.trim() && desc.trim()` — кнопка «Запустить аудит» `disabled` пока оба поля пусты
+
 ### 2026-06-27 — Чек-лист проверки макетов, ConfirmDialog, унификация кнопок
 
 **Чек-лист «Проверка макетов» (dq):**
