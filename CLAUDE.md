@@ -226,3 +226,22 @@ ebTime (13px, opacity 0.8) — "до 1 недели"
 **Подключение:**
 - `window.print()` заменён на `exportBuilderPDF()` в `StepResult.tsx` и `exportChecklistPDF()` в `ChecklistView.tsx`
 - В аудите кнопка PDF уже вызывала `exportAuditPDF()` (был базовый вариант, теперь на общем рендере)
+
+### 2026-06-27 — Чек-лист проверки макетов, ConfirmDialog, унификация кнопок
+
+**Чек-лист «Проверка макетов» (dq):**
+- `ChecklistMode` расширен значением `'dq'`; данные в `lib/data/checklists.ts`: 6 блоков, 20 критериев
+- Дисклеймер `warn`: «Версия от 15.05.2025. Некоторые пункты могут не отражать текущий процесс…»
+- Роут `/checklist/dq`, пункт в Sidebar (`ClipboardCheck`), метка в `checklistPdf.ts`
+- `useChecklist.ts`: три точки с `?? {}` — фоллбэк для старого localStorage без ключа `dq`
+
+**ConfirmDialog:**
+- `components/ui/ConfirmDialog.tsx` — оверлей + карточка 360px, кнопки «Отмена» (secondary) + «Удалить» (danger)
+- Клик по оверлею закрывает диалог
+- Заменяет `window.confirm` в двух местах: список аудитов (`pendingDelete: number | null`) и отчёт (`confirmDelete: boolean`)
+
+**Button — унификация:**
+- Добавлен `variant="danger"` (красный фон, белый текст)
+- Размеры переведены на фиксированную высоту: `sm` — 28px, `md` — 36px, `lg` — 44px; вертикальный padding убран
+- `iconOnly` — `width` равен высоте (`28px / 36px / 44px`), `padding: 0` — всегда квадратный
+- Кастомные `.listCardBtn` / `.listCardBtnDelete` удалены; кнопки аудита переведены на `Button variant="ghost" iconOnly`
