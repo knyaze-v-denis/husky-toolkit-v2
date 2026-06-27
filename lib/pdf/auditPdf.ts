@@ -28,13 +28,13 @@ function buildHTML(entry: AuditEntry): string {
   const scoreLabel = score >= 70 ? 'Хорошее описание' : score >= 40 ? 'Требует доработки' : 'Значительные пробелы';
 
   const renderSection = (sec: AuditEntry['result']['sections'][0]) => `
-    <div data-nocut style="border:0.5px solid #e0e0e0;border-radius:10px;overflow:hidden;margin-bottom:10px">
-      <div style="padding:8px 14px;background:${STATUS_BG[sec.status]};color:${STATUS_TC[sec.status]};display:flex;justify-content:space-between;font-size:13px;font-weight:500">
+    <div style="border:0.5px solid #e0e0e0;border-radius:10px;overflow:hidden;margin-bottom:10px">
+      <div data-nocut style="padding:8px 14px;background:${STATUS_BG[sec.status]};color:${STATUS_TC[sec.status]};display:flex;justify-content:space-between;font-size:13px;font-weight:500">
         <span>${sec.title}</span><span style="font-size:11px;opacity:.8">${STATUS_LABEL[sec.status]}</span>
       </div>
       <div style="background:white">
         ${sec.items.map(item => `
-          <div style="display:flex;gap:8px;padding:8px 14px;border-top:0.5px solid #eee;font-size:12px;line-height:1.5;align-items:flex-start">
+          <div data-nocut style="display:flex;gap:8px;padding:8px 14px;border-top:0.5px solid #eee;font-size:12px;line-height:1.5;align-items:flex-start">
             <div style="flex-shrink:0;margin-top:1px">${statusIcon(item.status)}</div>
             <span>${item.text}</span>
           </div>`).join('')}
@@ -42,11 +42,11 @@ function buildHTML(entry: AuditEntry): string {
     </div>`;
 
   const renderList = (items: string[], marker: 'fail' | 'arrow' | 'num', headBg: string, headTc: string, headLabel: string) => `
-    <div data-nocut style="border:0.5px solid #e0e0e0;border-radius:10px;overflow:hidden;margin-bottom:10px">
-      <div style="padding:8px 14px;background:${headBg};color:${headTc};font-size:13px;font-weight:500">${headLabel}</div>
+    <div style="border:0.5px solid #e0e0e0;border-radius:10px;overflow:hidden;margin-bottom:10px">
+      <div data-nocut style="padding:8px 14px;background:${headBg};color:${headTc};font-size:13px;font-weight:500">${headLabel}</div>
       <div style="background:white">
         ${items.map((item, i) => `
-          <div style="display:flex;gap:8px;padding:8px 14px;border-top:0.5px solid #eee;font-size:12px;line-height:1.5;align-items:flex-start">
+          <div data-nocut style="display:flex;gap:8px;padding:8px 14px;border-top:0.5px solid #eee;font-size:12px;line-height:1.5;align-items:flex-start">
             ${marker === 'num'
               ? `<span style="flex-shrink:0;font-weight:600;color:#534AB7;min-width:18px">${i + 1}.</span>`
               : marker === 'fail'

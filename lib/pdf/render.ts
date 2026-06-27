@@ -86,6 +86,14 @@ export async function renderPDF(html: string, filename: string): Promise<void> {
       pdf.addImage(slice.toDataURL('image/png'), 'PNG', 0, dstY, PAGE_W, cH);
     }
 
+    const total = pdf.getNumberOfPages();
+    for (let p = 1; p <= total; p++) {
+      pdf.setPage(p);
+      pdf.setFontSize(9);
+      pdf.setTextColor(180, 180, 180);
+      pdf.text(`${p} / ${total}`, PAGE_W / 2, PAGE_H - 4, { align: 'center' });
+    }
+
     pdf.save(filename);
   } finally {
     document.body.removeChild(wrap);
