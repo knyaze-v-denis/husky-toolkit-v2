@@ -1,9 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { LayoutGrid, FileText, CheckSquare, Info, ScanSearch, ClipboardCheck, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutGrid, FileText, CheckSquare, Info, ScanSearch, ClipboardCheck, ChevronLeft, ChevronRight, LogOut } from 'lucide-react';
+import { createClient } from '@/lib/supabase/client';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import styles from './Sidebar.module.css';
 
 const NAV_ITEMS = [
@@ -49,8 +51,22 @@ interface SidebarProps {
 
 export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
   const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
+  const [confirmSignOut, setConfirmSignOut] = useState(false);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null));
+  }, []);
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push('/login');
+  };
 
   useEffect(() => {
     const saved = localStorage.getItem('sidebar-collapsed');
@@ -119,6 +135,37 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
         <span className={styles.navTooltip} style={{ top: tooltip.y, left: tooltip.x }}>
           {tooltip.text}
         </span>
+      )}
+
+      {/* Пользователь */}
+      <div className={`${styles.userBlock} ${collapsed ? styles.userBlockCollapsed : ''}`}
+        onMouseEnter={collapsed ? e => {
+          const r = e.currentTarget.getBoundingClientRect();
+          setTooltip({ text: email ?? '', x: r.right + 8, y: r.top + r.height / 2 });
+        } : undefined}
+        onMouseLeave={collapsed ? () => setTooltip(null) : undefined}
+      >
+        <div className={styles.userAvatar}>
+          {email ? email[0].toUpperCase() : '?'}
+        </div>
+        {!collapsed && (
+          <>
+            <span className={styles.userEmail}>{email}</span>
+            <button className={styles.signOutBtn} onClick={() => setConfirmSignOut(true)} title="Выйти" aria-label="Выйти">
+              <LogOut size={14} />
+            </button>
+          </>
+        )}
+      </div>
+
+      {confirmSignOut && (
+        <ConfirmDialog
+          title="Выйти из аккаунта?"
+          message="Вы будете перенаправлены на страницу входа."
+          confirmLabel="Выйти"
+          onConfirm={handleSignOut}
+          onCancel={() => setConfirmSignOut(false)}
+        />
       )}
 
       {/* Кнопка сворачивания (только на десктопе) */}

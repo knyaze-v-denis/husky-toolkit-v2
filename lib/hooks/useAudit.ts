@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { useLocalStorage } from './useLocalStorage';
+import { useState, useCallback, useEffect } from 'react';
+import { createClient } from '@/lib/supabase/client';
 
 // ─── ТИПЫ ────────────────────────────────────────────────────────
 
@@ -26,7 +26,7 @@ export interface AuditResult {
 }
 
 export interface AuditEntry {
-  id: number;
+  id: string;
   date: string;
   time: string;
   title: string;
@@ -48,23 +48,49 @@ export interface AuditForm {
 }
 
 const EMPTY_FORM: AuditForm = { title: '', link: '', usAs: '', usWant: '', usTo: '', desc: '' };
-const MAX_HISTORY = 20;
 
+export function rowToEntry(row: { id: string; title: string; created_at: string; form: AuditForm; result: AuditResult }): AuditEntry {
+  const d = new Date(row.created_at);
+  return {
+    id: row.id,
+    date: d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }),
+    time: d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+    title: row.title,
+    link: row.form.link ?? '',
+    usAs: row.form.usAs ?? '',
+    usWant: row.form.usWant ?? '',
+    usTo: row.form.usTo ?? '',
+    desc: row.form.desc ?? '',
+    result: row.result,
+  };
+}
 
 // ─── ХУК ─────────────────────────────────────────────────────────
 
 export function useAudit() {
-  const [history, setHistory] = useLocalStorage<AuditEntry[]>('husky-audit-history', []);
+  const [history, setHistory] = useState<AuditEntry[]>([]);
   const [form, setForm] = useState<AuditForm>(EMPTY_FORM);
   const [result, setResult] = useState<AuditResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    const supabase = createClient();
+    supabase
+      .from('audit_entries')
+      .select('id, title, created_at, form, result')
+      .order('created_at', { ascending: false })
+      .limit(20)
+      .then(({ data }) => {
+        if (data) setHistory(data.map(rowToEntry));
+      });
+  }, []);
+
   const updateForm = useCallback((patch: Partial<AuditForm>) => {
     setForm(prev => ({ ...prev, ...patch }));
   }, []);
 
-  const runAudit = useCallback(async (): Promise<number | null> => {
+  const runAudit = useCallback(async (): Promise<string | null> => {
     if (!form.title.trim()) {
       setError('Укажите название задачи — оно используется в истории аудитов и экспорте.');
       return null;
@@ -101,22 +127,22 @@ export function useAudit() {
 
       setResult(data);
 
-      const id = Date.now();
-      const entry: AuditEntry = {
-        id,
-        date:  new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }),
-        time:  new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
-        title: form.title,
-        link:  form.link,
-        usAs:  form.usAs,
-        usWant: form.usWant,
-        usTo:  form.usTo,
-        desc:  form.desc,
-        result: data,
-      };
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      const { data: inserted, error: dbError } = await supabase
+        .from('audit_entries')
+        .insert({ user_id: user?.id, title: form.title, form: { link: form.link, usAs: form.usAs, usWant: form.usWant, usTo: form.usTo, desc: form.desc }, result: data })
+        .select('id, title, created_at, form, result')
+        .single();
 
-      setHistory(prev => [entry, ...prev].slice(0, MAX_HISTORY));
-      return id;
+      if (dbError || !inserted) {
+        setError('Аудит выполнен, но не удалось сохранить в историю.');
+        return null;
+      }
+
+      const entry = rowToEntry(inserted);
+      setHistory(prev => [entry, ...prev].slice(0, 20));
+      return entry.id;
 
     } catch {
       setError('Нет соединения с сервером. Проверьте интернет и попробуйте снова.');
@@ -124,7 +150,7 @@ export function useAudit() {
     } finally {
       setLoading(false);
     }
-  }, [form, setHistory]);
+  }, [form]);
 
   const openEntry = useCallback((entry: AuditEntry) => {
     setForm({ title: entry.title, link: entry.link, usAs: entry.usAs, usWant: entry.usWant, usTo: entry.usTo, desc: entry.desc });
@@ -132,9 +158,11 @@ export function useAudit() {
     setError(null);
   }, []);
 
-  const deleteEntry = useCallback((id: number) => {
+  const deleteEntry = useCallback(async (id: string) => {
+    const supabase = createClient();
+    await supabase.from('audit_entries').delete().eq('id', id);
     setHistory(prev => prev.filter(e => e.id !== id));
-  }, [setHistory]);
+  }, []);
 
   const resetAudit = useCallback(() => {
     setForm(EMPTY_FORM);
@@ -142,30 +170,10 @@ export function useAudit() {
     setError(null);
   }, []);
 
-  const injectResult = useCallback((r: AuditResult, formData: AuditForm): number => {
-    const id = Date.now();
-    const entry: AuditEntry = {
-      id,
-      date: new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }),
-      time: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
-      title: formData.title,
-      link:  formData.link,
-      usAs:  formData.usAs,
-      usWant: formData.usWant,
-      usTo:  formData.usTo,
-      desc:  formData.desc,
-      result: r,
-    };
-    setHistory(prev => [entry, ...prev].slice(0, MAX_HISTORY));
-    setResult(r);
-    setError(null);
-    return id;
-  }, [setHistory]);
-
   return {
     form, updateForm,
     result, loading, error,
     history,
-    runAudit, openEntry, deleteEntry, resetAudit, injectResult,
+    runAudit, openEntry, deleteEntry, resetAudit,
   };
 }

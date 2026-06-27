@@ -145,13 +145,65 @@
   padding: 7px;
 }
 
+.userBlock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  margin-top: auto;
+  border-top: 0.5px solid #eee;
+}
+
+.userBlockCollapsed {
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.userAvatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.userEmail {
+  font-size: 11px;
+  color: #888;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.signOutBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #bbb;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  flex-shrink: 0;
+  transition: color .15s;
+}
+
+.signOutBtn:hover {
+  color: #c0392b;
+}
+
 .collapseBtn {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   padding: 10px 0;
-  margin-top: auto;
   background: none;
   border: none;
   border-top: 0.5px solid #eee;

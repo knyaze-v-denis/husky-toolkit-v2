@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useCallback, useContext, useState, ReactNode } from 'react';
+import { usePathname } from 'next/navigation';
 import { Sidebar } from './Sidebar';
 import styles from './Layout.module.css';
 
@@ -28,9 +29,12 @@ interface LayoutProps {
 }
 
 export function Layout({ children }: LayoutProps) {
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [rightPanel, setRightPanelState] = useState<ReactNode>(null);
   const setRightPanel = useCallback((node: ReactNode) => setRightPanelState(node), []);
+
+  if (pathname === '/login') return <>{children}</>;
 
   return (
     <RightPanelCtx.Provider value={{ setRightPanel }}>
