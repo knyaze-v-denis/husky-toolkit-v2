@@ -273,7 +273,7 @@ export function AuditListView() {
                       {e.result.score}%
                     </div>
                     <div className={styles.listCardBody}>
-                      <div className={styles.listCardTitle}>{e.title}</div>
+                      <div className={styles.listCardTitle} title={e.title}>{e.title}</div>
                       <div className={styles.listCardMeta}>{e.date} · {e.time}</div>
                     </div>
                     <div className={styles.listCardActions} onClick={ev => ev.stopPropagation()}>
@@ -313,6 +313,7 @@ export function AuditFormView() {
   const [infoOpen, setInfoOpen] = useState(() => hook.history.length === 0);
 
   const loading = hook.loading || mockLoading;
+  const canRun = hook.form.title.trim().length > 0 && hook.form.desc.trim().length > 0;
 
   const handleRun = async () => {
     const id = await hook.runAudit();
@@ -392,7 +393,7 @@ export function AuditFormView() {
                 </div>
               </div>
               <div className={styles.field}>
-                <label className={styles.label}>Описание задачи</label>
+                <label className={styles.label}>Описание задачи<span className={styles.reqDot} /></label>
                 <textarea
                   className={styles.textarea}
                   rows={5}
@@ -402,7 +403,7 @@ export function AuditFormView() {
                 />
               </div>
               <div className={styles.formActions}>
-                <Button variant="primary" fullWidth onClick={handleRun}>Запустить аудит</Button>
+                <Button variant="primary" fullWidth onClick={handleRun} disabled={!canRun}>Запустить аудит</Button>
                 {process.env.NODE_ENV !== 'production' && (
                   <Button variant="secondary" size="sm" onClick={handleMock}>Загрузить пример</Button>
                 )}
@@ -457,9 +458,9 @@ export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; 
         </div>
       </div>
       <div className={styles.reportTitleCol}>
-        <span className={styles.pageTitle}>{entry.title}</span>
+        <span className={styles.pageTitle} title={entry.title}>{entry.title}</span>
         {entry.link && (
-          <a href={entry.link} target="_blank" rel="noreferrer" className={styles.reportLink}>
+          <a href={entry.link} target="_blank" rel="noreferrer" className={styles.reportLink} title={entry.link}>
             {entry.link}
           </a>
         )}

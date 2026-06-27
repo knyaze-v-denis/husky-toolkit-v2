@@ -52,8 +52,21 @@
 .sm.iconOnly { width: 28px; padding: 0; }
 .md.iconOnly { width: 36px; padding: 0; }
 .lg.iconOnly { width: 44px; padding: 0; }
-.md.iconOnly { padding: 10px; }
-.lg.iconOnly { padding: 14px; }
+
+/* ── Tooltip ────────────────────────────────────────────────────── */
+.tip {
+  position: fixed;
+  transform: translateX(-50%);
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 11px;
+  line-height: 1.4;
+  padding: 4px 8px;
+  border-radius: 5px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 9999;
+}
 
 /* ── Variants ───────────────────────────────────────────────────── */
 
