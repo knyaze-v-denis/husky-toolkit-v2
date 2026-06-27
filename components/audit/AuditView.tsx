@@ -399,7 +399,7 @@ export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; 
     <div>
       <PageHeader title="ИИ-аудит задачи" disclaimer={{ text: DISCLAIMER, variant: 'info' }} />
       {reportBelow}
-      <div className={styles.wrap}>
+      <div className={`${styles.wrap} ${styles.wrapReport}`}>
         <ResultBody result={entry.result} />
       </div>
       {confirmDelete && (
