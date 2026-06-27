@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback } from 'react';
-import { useLocalStorage } from './useLocalStorage';
+import { useCallback, useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
 import { CHECKLISTS, type ChecklistMode } from '../data/checklists';
 
 // ─── ТИПЫ ────────────────────────────────────────────────────────
@@ -49,24 +49,50 @@ export function getChecklistStats(
 // ─── ХУК ─────────────────────────────────────────────────────────
 
 export function useChecklist() {
-  const [checks, setChecks] = useLocalStorage<ChecklistChecks>(
-    'husky-checklists',
-    INITIAL_CHECKS,
-  );
+  const [checks, setChecks] = useState<ChecklistChecks>(INITIAL_CHECKS);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase
+      .from('checklist_states')
+      .select('mode, checked')
+      .then(({ data }) => {
+        if (!data?.length) return;
+        const loaded: ChecklistChecks = { ...INITIAL_CHECKS };
+        data.forEach(row => {
+          if (row.mode in loaded) loaded[row.mode as ChecklistMode] = row.checked;
+        });
+        setChecks(loaded);
+      });
+  }, []);
+
+  const save = useCallback(async (mode: ChecklistMode, checked: Record<string, boolean>) => {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    await supabase.from('checklist_states').upsert(
+      { user_id: user?.id, mode, checked, updated_at: new Date().toISOString() },
+      { onConflict: 'user_id,mode' },
+    );
+  }, []);
 
   const toggle = useCallback((mode: ChecklistMode, key: string) => {
-    setChecks(prev => ({
-      ...prev,
-      [mode]: {
-        ...prev[mode],
-        [key]: !(prev[mode] ?? {})[key],
-      },
-    }));
-  }, [setChecks]);
+    setChecks(prev => {
+      const next = {
+        ...prev,
+        [mode]: { ...prev[mode], [key]: !(prev[mode] ?? {})[key] },
+      };
+      save(mode, next[mode]);
+      return next;
+    });
+  }, [save]);
 
   const reset = useCallback((mode: ChecklistMode) => {
-    setChecks(prev => ({ ...prev, [mode]: {} }));
-  }, [setChecks]);
+    setChecks(prev => {
+      const next = { ...prev, [mode]: {} };
+      save(mode, {});
+      return next;
+    });
+  }, [save]);
 
   const stats = useCallback((mode: ChecklistMode) => {
     return getChecklistStats(mode, checks);

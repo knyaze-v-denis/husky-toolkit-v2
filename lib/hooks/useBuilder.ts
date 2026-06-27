@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback } from 'react';
-import { useLocalStorage } from './useLocalStorage';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
 import {
   QUESTIONS, BUILDS, RISK_GROUPS,
   getBuildType, getEBSize,
@@ -42,24 +42,54 @@ function initRisks(risks: Record<string, string[]>): Record<string, string[]> {
 // ─── ХУК ─────────────────────────────────────────────────────────
 
 export function useBuilder() {
-  const [state, setState] = useLocalStorage<BuilderState>(
-    'husky-builder',
-    { ...INITIAL_STATE, risks: initRisks({}) },
-  );
+  const [state, setState] = useState<BuilderState>({ ...INITIAL_STATE, risks: initRisks({}) });
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Вычисление суммы баллов опросника
+  useEffect(() => {
+    const supabase = createClient();
+    supabase
+      .from('builder_state')
+      .select('state')
+      .single()
+      .then(({ data }) => {
+        if (data?.state) {
+          const loaded = data.state as BuilderState;
+          setState({ ...loaded, risks: initRisks(loaded.risks ?? {}) });
+        }
+      });
+  }, []);
+
+  const persist = useCallback((next: BuilderState) => {
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      await supabase.from('builder_state').upsert(
+        { user_id: user?.id, state: next, updated_at: new Date().toISOString() },
+        { onConflict: 'user_id' },
+      );
+    }, 1000);
+  }, []);
+
+  const update = useCallback((fn: (prev: BuilderState) => BuilderState) => {
+    setState(prev => {
+      const next = fn(prev);
+      persist(next);
+      return next;
+    });
+  }, [persist]);
+
   const calcQScore = useCallback((): number => {
     let s = 0;
     QUESTIONS.forEach(q => {
       const a = state.answers[q.id];
-      if (a === 'yes')                      s += q.yes;
+      if (a === 'yes')                           s += q.yes;
       else if (a === 'maybe' && q.maybe != null) s += q.maybe;
-      else if (a === 'no')                  s += q.no;
+      else if (a === 'no')                       s += q.no;
     });
     return s;
   }, [state.answers]);
 
-  // Вычисление баллов ЭБ
   const calcEBScore = useCallback((): number => {
     const build = state.build ?? 'min';
     let s = BUILDS[build].ebVol;
@@ -80,41 +110,29 @@ export function useBuilder() {
     return getEBSize(calcEBScore());
   }, [calcEBScore]);
 
-  // Установить ответ на вопрос
   const setAnswer = useCallback((id: string, answer: Answer) => {
-    setState(prev => ({
-      ...prev,
-      answers: { ...prev.answers, [id]: answer },
-    }));
-  }, [setState]);
+    update(prev => ({ ...prev, answers: { ...prev.answers, [id]: answer } }));
+  }, [update]);
 
-  // Перейти на шаг (определяет билд на шаге 2)
   const goToStep = useCallback((n: number) => {
-    setState(prev => {
+    update(prev => {
       const next = { ...prev, step: n, maxReached: Math.max(prev.maxReached, n) };
-      if (n === 2) {
-        const score = calcQScore();
-        next.build = getBuildType(score);
-      }
+      if (n === 2) next.build = getBuildType(calcQScore());
       return next;
     });
-  }, [setState, calcQScore]);
+  }, [update, calcQScore]);
 
-  // Установить фактор ЭБ (complexity / novelty)
   const setFactor = useCallback((key: 'complexity' | 'novelty', value: string) => {
-    setState(prev => ({ ...prev, [key]: value }));
-  }, [setState]);
+    update(prev => ({ ...prev, [key]: value }));
+  }, [update]);
 
-  // Переключить риск
   const toggleRisk = useCallback((group: string, v: string, isNone: boolean) => {
-    setState(prev => {
+    update(prev => {
       const sel = prev.risks[group] ?? [];
       let next: string[];
-
       if (isNone) {
         next = sel.includes(v) ? [] : [v];
       } else {
-        // Взаимоисключающие пункты компонентов
         const exclusive: Record<string, string> = { cmp1: 'cmp2', cmp2: 'cmp1' };
         let filtered = sel.filter(x => {
           const it = RISK_GROUPS.find(g => g.label === group)?.items.find(i => i.v === x);
@@ -125,19 +143,17 @@ export function useBuilder() {
         if (idx > -1) filtered.splice(idx, 1); else filtered.push(v);
         next = filtered;
       }
-
       return { ...prev, risks: { ...prev.risks, [group]: next } };
     });
-  }, [setState]);
+  }, [update]);
 
-  // Сброс
   const reset = useCallback(() => {
-    setState({ ...INITIAL_STATE, risks: initRisks({}) });
-  }, [setState]);
+    update(() => ({ ...INITIAL_STATE, risks: initRisks({}) }));
+  }, [update]);
 
   const resetFactors = useCallback(() => {
-    setState(prev => ({ ...prev, complexity: null, novelty: null, risks: initRisks({}) }));
-  }, [setState]);
+    update(prev => ({ ...prev, complexity: null, novelty: null, risks: initRisks({}) }));
+  }, [update]);
 
   return {
     state,
