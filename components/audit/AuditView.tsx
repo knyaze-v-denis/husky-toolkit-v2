@@ -526,7 +526,8 @@ export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; 
 
   return (
     <div>
-      <PageHeader title="ИИ-аудит задачи" disclaimer={{ text: DISCLAIMER, variant: 'info' }} below={reportBelow} />
+      <PageHeader title="ИИ-аудит задачи" disclaimer={{ text: DISCLAIMER, variant: 'info' }} />
+      {reportBelow}
       <div className={styles.wrap}>
         <ResultBody result={entry.result} />
       </div>

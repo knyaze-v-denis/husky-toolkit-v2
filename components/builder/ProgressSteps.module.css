@@ -75,7 +75,7 @@
   background: #1D9E75;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .label { display: none; }
   .item.active .label { display: block; font-size: 11px; }
 }
