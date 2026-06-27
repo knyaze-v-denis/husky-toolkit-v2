@@ -14,19 +14,21 @@ interface ChecklistViewProps {
 }
 
 const DRAFT_DISCLAIMER = 'Регламентирующий документ по этому чек-листу находится в процессе разработки и утверждения. Используйте чек-лист как ориентир, а не как строгое требование.';
+const DQ_DISCLAIMER = 'Версия от 15.05.2025. Некоторые пункты могут не отражать текущий процесс — при наличии вопросов обратитесь к руководителю дизайн-команды.';
 const UC_DISCLAIMER = 'Дизайнеры не проводят ревью Use Case\'ов в рамках текущего процесса. Этот чек-лист можно использовать как опору, если вы самостоятельно пишете UC, или чтобы сформулировать обратную связь руководителю отдела бизнес- и системного анализа.';
 
-const CONFIG: Record<ChecklistMode, { disclaimer: string; disclaimerVariant: 'info' | 'warn'; hasRequired: boolean; fullBanner: boolean }> = {
+const CONFIG: Record<ChecklistMode, { disclaimer: string | null; disclaimerVariant: 'info' | 'warn'; hasRequired: boolean; fullBanner: boolean }> = {
   us: { disclaimer: DRAFT_DISCLAIMER, disclaimerVariant: 'warn', hasRequired: false, fullBanner: false },
   uc: { disclaimer: UC_DISCLAIMER,    disclaimerVariant: 'info', hasRequired: true,  fullBanner: true  },
   ex: { disclaimer: DRAFT_DISCLAIMER, disclaimerVariant: 'warn', hasRequired: false, fullBanner: false },
+  dq: { disclaimer: DQ_DISCLAIMER,    disclaimerVariant: 'warn', hasRequired: false, fullBanner: false },
 };
 
 export function ChecklistView({ mode }: ChecklistViewProps) {
   const { checks, toggle, reset, stats } = useChecklist();
   const cl = CHECKLISTS[mode];
   const st = stats(mode);
-  const cur = checks[mode];
+  const cur = checks[mode] ?? {};
   const cfg = CONFIG[mode];
 
   const banner = (() => {
@@ -42,7 +44,7 @@ export function ChecklistView({ mode }: ChecklistViewProps) {
     <div>
       <PageHeader
         title={cl.label}
-        disclaimer={{ text: cfg.disclaimer, variant: cfg.disclaimerVariant }}
+        disclaimer={cfg.disclaimer ? { text: cfg.disclaimer, variant: cfg.disclaimerVariant } : undefined}
         banner={banner}
         progress={st.pct}
         statsLeft={`${st.checked} из ${st.total} критериев`}

@@ -24,29 +24,34 @@
 
 /* ── Sizes ──────────────────────────────────────────────────────── */
 
-/* sm — 28px: 6 + 16 + 6 */
+/* sm — 28px */
 .sm {
-  padding: 6px 10px;
+  height: 28px;
+  padding: 0 10px;
   font-size: 12px;
   border-radius: 6px;
 }
 
-/* md — 36px: 10 + 16 + 10 */
+/* md — 36px */
 .md {
-  padding: 10px 14px;
+  height: 36px;
+  padding: 0 14px;
   font-size: 13px;
   border-radius: 8px;
 }
 
-/* lg — 44px: 14 + 16 + 14 */
+/* lg — 44px */
 .lg {
-  padding: 14px 20px;
+  height: 44px;
+  padding: 0 20px;
   font-size: 15px;
   border-radius: 10px;
 }
 
-/* Icon-only: square padding */
-.sm.iconOnly { padding: 6px; }
+/* Icon-only: fixed square size, no padding */
+.sm.iconOnly { width: 28px; padding: 0; }
+.md.iconOnly { width: 36px; padding: 0; }
+.lg.iconOnly { width: 44px; padding: 0; }
 .md.iconOnly { padding: 10px; }
 .lg.iconOnly { padding: 14px; }
 
@@ -80,3 +85,13 @@
   background: rgba(0,0,0,0.05);
   color: #111;
 }
+
+.danger {
+  background: #c0392b;
+  color: white;
+}
+
+.danger:hover:not(:disabled) {
+  background: #a93226;
+}
+

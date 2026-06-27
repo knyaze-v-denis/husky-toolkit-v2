@@ -314,22 +314,11 @@
   margin-top: 2px;
 }
 
-.listCardDelete {
-  background: none;
-  border: none;
-  color: #ccc;
-  cursor: pointer;
-  padding: 6px;
-  flex-shrink: 0;
+.listCardActions {
   display: flex;
   align-items: center;
-  border-radius: 6px;
-  transition: color 0.1s, background 0.1s;
-}
-
-.listCardDelete:hover {
-  color: #999;
-  background: #f5f5f5;
+  gap: 2px;
+  flex-shrink: 0;
 }
 
 /* Empty state */

@@ -7,6 +7,7 @@ import { exportAuditPDF } from '@/lib/pdf/auditPdf';
 import { useAudit, type AuditResult, type AuditEntry, type AuditForm } from '@/lib/hooks/useAudit';
 import { PageHeader } from '@/components/builder/PageHeader';
 import { Button } from '@/components/ui/Button';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import styles from './AuditView.module.css';
 
 const DISCLAIMER = 'Анализ проводит Claude Haiku 4.5. Модель может совершать ошибки — проверяйте выводы самостоятельно, особенно при принятии важных решений.';
@@ -239,6 +240,7 @@ function LoadingBlock() {
 export function AuditListView() {
   const hook = useAudit();
   const router = useRouter();
+  const [pendingDelete, setPendingDelete] = useState<number | null>(null);
 
   return (
     <div>
@@ -274,13 +276,14 @@ export function AuditListView() {
                       <div className={styles.listCardTitle}>{e.title}</div>
                       <div className={styles.listCardMeta}>{e.date} · {e.time}</div>
                     </div>
-                    <button
-                      className={styles.listCardDelete}
-                      onClick={ev => { ev.stopPropagation(); hook.deleteEntry(e.id); }}
-                      title="Удалить"
-                    >
-                      <Trash2 size={14} />
-                    </button>
+                    <div className={styles.listCardActions} onClick={ev => ev.stopPropagation()}>
+                      <Button variant="ghost" size="sm" iconOnly onClick={() => exportAuditPDF(e)} title="Скачать PDF">
+                        <Download size={14} />
+                      </Button>
+                      <Button variant="ghost" size="sm" iconOnly onClick={() => setPendingDelete(e.id)} title="Удалить">
+                        <Trash2 size={14} />
+                      </Button>
+                    </div>
                   </div>
                 );
               })}
@@ -288,6 +291,15 @@ export function AuditListView() {
           </>
         )}
       </div>
+      {pendingDelete !== null && (
+        <ConfirmDialog
+          title="Удалить аудит?"
+          message={`«${hook.history.find(e => e.id === pendingDelete)?.title}» будет удалён без возможности восстановления.`}
+          confirmLabel="Удалить"
+          onConfirm={() => { hook.deleteEntry(pendingDelete); setPendingDelete(null); }}
+          onCancel={() => setPendingDelete(null)}
+        />
+      )}
     </div>
   );
 }
@@ -408,6 +420,7 @@ export function AuditFormView() {
 export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; isFresh: boolean }) {
   const hook = useAudit();
   const router = useRouter();
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   if (!entry) {
     return (
@@ -438,6 +451,9 @@ export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; 
               Новый аудит
             </Button>
           )}
+          <Button variant="ghost" size="sm" iconOnly onClick={() => setConfirmDelete(true)} title="Удалить">
+            <Trash2 size={14} />
+          </Button>
         </div>
       </div>
       <div className={styles.reportTitleCol}>
@@ -457,6 +473,15 @@ export function AuditReportView({ entry, isFresh }: { entry: AuditEntry | null; 
       <div className={styles.wrap}>
         <ResultBody result={entry.result} />
       </div>
+      {confirmDelete && (
+        <ConfirmDialog
+          title="Удалить аудит?"
+          message={`«${entry.title}» будет удалён без возможности восстановления.`}
+          confirmLabel="Удалить"
+          onConfirm={() => { hook.deleteEntry(entry.id); router.push('/audit'); }}
+          onCancel={() => setConfirmDelete(false)}
+        />
+      )}
     </div>
   );
 }

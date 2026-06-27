@@ -8,7 +8,7 @@ import { CHECKLISTS, type ChecklistMode } from '../data/checklists';
 
 export type ChecklistChecks = Record<ChecklistMode, Record<string, boolean>>;
 
-const INITIAL_CHECKS: ChecklistChecks = { us: {}, uc: {}, ex: {} };
+const INITIAL_CHECKS: ChecklistChecks = { us: {}, uc: {}, ex: {}, dq: {} };
 
 
 // ─── СТАТИСТИКА ──────────────────────────────────────────────────
@@ -27,7 +27,7 @@ export function getChecklistStats(
   checks: ChecklistChecks,
 ): ChecklistStats {
   const cur = CHECKLISTS[mode];
-  const st  = checks[mode];
+  const st  = checks[mode] ?? {};
   let total = 0, checked = 0, req = 0, reqChecked = 0;
 
   cur.blocks.forEach(b => {
@@ -59,7 +59,7 @@ export function useChecklist() {
       ...prev,
       [mode]: {
         ...prev[mode],
-        [key]: !prev[mode][key],
+        [key]: !(prev[mode] ?? {})[key],
       },
     }));
   }, [setChecks]);

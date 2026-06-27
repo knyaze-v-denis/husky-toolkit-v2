@@ -8,6 +8,7 @@ const MODE_LABEL: Record<ChecklistMode, string> = {
   us: 'Чек-лист User Story',
   uc: 'Чек-лист Use Case',
   ex: 'Чек-лист Экспертная оценка',
+  dq: 'Чек-лист Качество проектирования',
 };
 
 function buildHTML(mode: ChecklistMode, checks: Record<string, boolean>): string {

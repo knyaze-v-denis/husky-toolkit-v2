@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutGrid, FileText, CheckSquare, Info, ScanSearch } from 'lucide-react';
+import { LayoutGrid, FileText, CheckSquare, Info, ScanSearch, ClipboardCheck } from 'lucide-react';
 import styles from './Sidebar.module.css';
 
 const NAV_ITEMS = [
@@ -18,6 +18,7 @@ const NAV_ITEMS = [
       { href: '/checklist/us', label: 'User Story',       icon: <FileText size={15} /> },
       { href: '/checklist/uc', label: 'Use Case',         icon: <CheckSquare size={15} /> },
       { href: '/checklist/ex', label: 'Экспертная оценка', icon: <Info size={15} /> },
+      { href: '/checklist/dq', label: 'Проверка макетов', icon: <ClipboardCheck size={15} /> },
     ],
   },
   {
