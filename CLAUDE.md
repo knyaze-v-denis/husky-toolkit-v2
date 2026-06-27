@@ -258,3 +258,11 @@ ebTime (13px, opacity 0.8) — "до 1 недели"
 - Размеры переведены на фиксированную высоту: `sm` — 28px, `md` — 36px, `lg` — 44px; вертикальный padding убран
 - `iconOnly` — `width` равен высоте (`28px / 36px / 44px`), `padding: 0` — всегда квадратный
 - Кастомные `.listCardBtn` / `.listCardBtnDelete` удалены; кнопки аудита переведены на `Button variant="ghost" iconOnly`
+
+### 2026-06-27 — Мобильный адаптив (брейкпоинт 768px)
+
+- Брейкпоинт: `768px` — все `@media` в Layout, Sidebar, PageHeader, ProgressSteps
+- Layout: `flex-direction: column` на мобиле — topbar встаёт сверху, контент ниже
+- Sidebar: `position: fixed; left: -100%` → `left: 0` при открытии; ширина `256px` (как на десктопе)
+- Sticky PageHeader: `top: 52px` на мобиле (высота topbar'а)
+- Отчёт аудита: `titleCard` вынесен из `below` проп наружу — фиолетовая шапка залипает, белая карточка с названием/кнопками скроллится
